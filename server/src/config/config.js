@@ -7,7 +7,11 @@ module.exports = {
     options: {
       dialect: process.env.DIALECT || 'postgres',
       host: process.env.HOST || 'localhost',
-      port: 5432
+      port: 5432,
+      operatorsAliases: "Sequelize.Op"
     }
+  },
+  authentication: {
+    jwtSecret: process.env.JWT_SECRET || 'secret'
   }
 }

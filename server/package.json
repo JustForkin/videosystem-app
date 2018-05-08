@@ -17,7 +17,10 @@
     "nodemon": "^1.17.3"
   },
   "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "bluebird": "^3.5.1",
     "joi": "^13.2.0",
+    "jsonwebtoken": "^8.2.1",
     "pg": "^7.4.2",
     "pg-promise": "^8.4.0",
     "sequelize": "^4.37.6"

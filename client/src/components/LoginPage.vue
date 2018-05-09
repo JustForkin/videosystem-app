@@ -17,7 +17,8 @@
           name="username"
           v-model="username"
           minlength="5"
-          maxlength="30">
+          maxlength="30"
+          autocomplete="on">
       <!-- <p v-html="error" class="form-input-hint"></p> -->
       </div>
 
@@ -29,7 +30,8 @@
           name="password"
           v-model="password"
           minlength="8"
-          maxlength="30">
+          maxlength="30"
+          autocomplete="on">
         <!-- <p class="form-input-hint">The name is invalid.</p> -->
       </div>
       <!-- <div class="error" v-html="error" /> <br> -->

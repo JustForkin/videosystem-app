@@ -15,12 +15,11 @@ app.use(cors())
 
 require('./routes')(app)
 
-sequelize.sync()
+sequelize.sync({force: false})
   .then(() => {
     app.listen(process.env.PORT || config.port,
-      () => console.log('\x1b[32m', '>> SERVER START ON PORT ' + config.port))
+      () => console.log('>> SERVER START ON PORT ' + config.port))
   })
-
 
 // test db query
 /*db.any('SELECT * FROM "user"')

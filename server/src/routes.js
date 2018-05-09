@@ -4,11 +4,10 @@ const AuthenticationControllerPolicy = require ('./policies/AuthenticationContro
 module.exports = (app) => {
   app.post(
     '/signup',
-    AuthenticationControllerPolicy.signup,
+    // AuthenticationControllerPolicy.signup,
     AuthenticationController.signup)
 
   app.post(
     '/login',
-    // AuthenticationControllerPolicy.login,
     AuthenticationController.login)
 }

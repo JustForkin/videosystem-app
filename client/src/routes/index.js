@@ -1,6 +1,6 @@
-import Start from '@/components/StartPage'
-import SignUp from '@/components/SignUpPage'
-import Login from '@/components/LoginPage'
+import Start from '@/components/Start'
+import SignUp from '@/components/SignUp'
+import Login from '@/components/Login'
 
 const routes = [
   {

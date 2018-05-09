@@ -9,8 +9,14 @@
 
       </section>
       <section class="navbar-section">
-        <router-link to="login" class="btn btn-link btn-sm">Login</router-link>
-        <router-link to="signup" class="btn btn-link btn-sm">Sign Up</router-link>
+        <router-link
+          v-if="!$store.state.isUserLoggedIn"
+          to="login"
+          class="btn btn-link btn-sm">Login</router-link>
+        <router-link
+          v-if="!$store.state.isUserLoggedIn"
+          to="signup"
+          class="btn btn-link btn-sm">Sign Up</router-link>
       </section>
     </header>
   </div>

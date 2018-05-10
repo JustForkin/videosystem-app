@@ -12,6 +12,7 @@ function jwtSignUser (user) {
 module.exports = {
   async signup (req, res) {
     try {
+      console.log(req.body)
       const user = await User.create(req.body)
       const userJson = user.toJSON()
       res.send({

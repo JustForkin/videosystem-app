@@ -20,6 +20,7 @@
     "bcrypt-nodejs": "0.0.3",
     "bluebird": "^3.5.1",
     "joi": "^13.2.0",
+    "joi-date-extensions": "^1.2.0",
     "jsonwebtoken": "^8.2.1",
     "pg": "^7.4.2",
     "pg-promise": "^8.4.0",

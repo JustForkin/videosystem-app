@@ -5,9 +5,6 @@ const morgan = require('morgan')
 const config = require('./config/config')
 const {sequelize} = require('./models')
 
-// import VCalendar from 'v-calendar'
-// import 'v-calendar/lib/v-calendar.min.css'
-
 const app = express()
 
 // const db = require('./db');
@@ -15,14 +12,6 @@ const app = express()
 app.use(morgan('combined'))
 app.use(bodyParser.json())
 app.use(cors())
-
-// Use v-calendar, v-date-picker & v-popover components
-// Vue.use(VCalendar, {
-//   firstDayOfWeek: 2  // Monday
-// })
-
-// Vue.component('v-calendar', VCalendar);
-// Vue.component('v-date-picker', VCalendar);
 
 require('./routes')(app)
 

@@ -5,8 +5,15 @@ import App from './App'
 import router from './router'
 import { sync } from 'vuex-router-sync'
 import store from '@/store/store'
+import Vuetify from 'vuetify'
 
 Vue.config.productionTip = false
+
+Vue.use(Vuetify, {
+  theme: {
+    
+  }
+})
 
 sync(store, router)
 

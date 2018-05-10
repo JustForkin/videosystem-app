@@ -23,6 +23,9 @@
           v-if="!$store.state.isUserLoggedIn"
           to="signup"
           class="btn btn-link btn-sm">Sign Up</router-link>
+        <span
+          v-if="$store.state.isAdmin && $store.state.isUserLoggedIn"
+          class="label label-error">admin account</span>
         <button
           v-if="$store.state.isUserLoggedIn"
           @click="logout"

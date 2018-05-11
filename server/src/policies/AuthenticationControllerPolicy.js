@@ -7,27 +7,27 @@ module.exports = {
     const schema = {
       username: Joi.string().min(5).max(30).token().required(), // "user_one_1"
       password: Joi.string().min(8).max(30).token().required(), // "password_one_1"
-      firstname: Joi.string().regex(/^[a-zA-Z]+$/).min(1).max(30).required(), // "George"
-	    lastname: Joi.string().regex(/^[a-zA-Z]+$/).min(1).max(30), // "Moon"
-	    birthday: Joi.date().format('YYYY-MM-DD').max('now').min('1920-01-01'), // .regex(/^\d{4}\-\d{2}\-\d{2}$/), // "1998-04-04"
+      firstname: Joi.string().min(1).max(30).required(), // "George"
+	    lastname: Joi.string().max(30).allow(null), // "Moon"
+	    birthday: Joi.date().format('YYYY-MM-DD').max('now').min('1920-01-01').allow(null), // .regex(/^\d{4}\-\d{2}\-\d{2}$/), // "1998-04-04"
 	    gender: Joi.string().valid(['Male', 'Female']).required(), // "Male" or "Female"
-	    about: Joi.string() // "about me ..."
+	    about: Joi.string().allow(null) // "about me ..."
     }
 
     const {error} = Joi.validate(req.body, schema)
 
     // TODO: EXPAND THE CASES for different error cases
-    
+
     if (error){
       switch (error.details[0].context.key) {
         case 'username':
           res.status(400).send({
-            error: 'The username provided failed to match the following rules:<br>1. It must contain ONLY the following characters: lower case, upper case, numerics and underscore.<br>2. It must be at least 5 characters in length and not greater than 30 characters in length.'
+            error: 'Username must contain ONLY the following characters: lower case, upper case, numerics and underscore. and it must be at least 5 characters in length and not greater than 30 characters in length.'
           })
           break
         case 'password':
           res.status(400).send({
-            error: 'The password provided failed to match the following rules:<br>1. It must contain ONLY the following characters: lower case, upper case, numerics and underscore.<br>2. It must be at least 8 characters in length and not greater than 30 characters in length.'
+            error: 'Password must contain ONLY the following characters: lower case, upper case, numerics and underscore. and it must be at least 8 characters in length and not greater than 30 characters in length.'
           })
           break
         case 'firstname':

@@ -1,5 +1,5 @@
 <template>
-  <v-layout row>
+  <v-layout row style="padding-top: 35px;">
     <v-flex xs12 offset-xs0 sm10 offset-sm1 md8 offset-md2 lg6 offset-lg3 xl4 offset-xl4>
       <h1>Login</h1>
       <v-text-field
@@ -12,8 +12,7 @@
           v-model="password">
       </v-text-field>
       <v-btn
-        dark
-        class="red accent-3"
+        class="accent"
         @click="login">
         Login
       </v-btn>

@@ -1,7 +1,7 @@
 <template>
   <v-toolbar>
     <!-- <v-toolbar-side-icon></v-toolbar-side-icon> -->
-    <v-btn large flat icon color="red accent-3" to="/">
+    <v-btn large flat icon color="accent" to="/">
       <v-icon>ondemand_video</v-icon>
     </v-btn>
     <v-toolbar-title class="hidden-sm-and-down">Videosystem App</v-toolbar-title>
@@ -22,7 +22,7 @@
         v-if="$store.state.isAdmin && $store.state.isUserLoggedIn"
         style="margin: auto;"
         class="text-xs-center">
-        <v-chip small outline color="red accent-3">
+        <v-chip small outline color="accent">
           <v-icon left>build</v-icon>Admin account
         </v-chip>
       </div>

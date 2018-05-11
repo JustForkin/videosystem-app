@@ -28,11 +28,12 @@ export default {
 
 <style>
 /* for vuetify */
-@import 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons';
-@import 'https://unpkg.com/vuetify/dist/vuetify.min.css';
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons');
+@import url('https://fonts.googleapis.com/css?family=Comfortaa');
+@import url('https://unpkg.com/vuetify/dist/vuetify.min.css');
 
 #app {
-  font-family: 'Roboto', 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: 'Comfortaa', 'Roboto', 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;

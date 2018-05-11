@@ -7,11 +7,13 @@ import { sync } from 'vuex-router-sync'
 import store from '@/store/store'
 import Vuetify from 'vuetify'
 
+import colors from 'vuetify/es5/util/colors'
+
 Vue.config.productionTip = false
 
 Vue.use(Vuetify, {
   theme: {
-    
+    accent: colors.red.accent3
   }
 })
 

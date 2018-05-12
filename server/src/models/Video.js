@@ -15,6 +15,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       defaultValue: 0
     },
+    isPublic: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    },
     description: {
       type: DataTypes.TEXT,
       allowNull: true

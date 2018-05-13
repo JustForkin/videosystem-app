@@ -1,3 +1,43 @@
 [
-  
+  {
+    "title": "Video Title 1",
+    "isPublic": false,
+    "description": "Video description 1",
+    "authorUsername": "user1",
+    "countryId": "1"
+  },
+  {
+    "title": "Video Title 2",
+    "isPublic": true,
+    "description": "Video description 2",
+    "authorUsername": "user2",
+    "countryId": "1"
+  },
+  {
+    "title": "Video Title 3",
+    "isPublic": true,
+    "authorUsername": "user2",
+    "countryId": "1"
+  },
+  {
+    "title": "Video Title 4",
+    "isPublic": true,
+    "description": "Video description 4",
+    "authorUsername": "user3",
+    "countryId": "2"
+  },
+  {
+    "title": "Video Title 5",
+    "isPublic": false,
+    "description": "Video description 5",
+    "authorUsername": "user3",
+    "countryId": "2"
+  },
+  {
+    "title": "Video Title 6",
+    "isPublic": true,
+    "description": "Video description 6",
+    "authorUsername": "user3",
+    "countryId": "2"
+  }
 ]

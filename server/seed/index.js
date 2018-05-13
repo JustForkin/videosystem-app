@@ -7,9 +7,9 @@ const {
 
 const Promise = require('bluebird')
 
+const countries = require('./countries.json')
 const users = require('./users.json')
 const videos = require('./videos.json')
-const countries = require('./countries.json')
 
 sequelize.sync({force: true})
   .then(async function () {

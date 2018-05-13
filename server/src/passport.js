@@ -13,7 +13,6 @@ passport.use(
   },
   async function (jwtPayload, done) {
     try {
-      //console.log(jwtPayload.username)
       const user = await User.findOne({
         where: {
            username: jwtPayload.username

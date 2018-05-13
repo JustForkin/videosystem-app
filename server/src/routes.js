@@ -16,14 +16,26 @@ var storage = multer.diskStorage({
 })
 
 module.exports = (app) => {
+  // authorization
   app.post(
     '/signup',
     AuthenticationControllerPolicy.signup,
     AuthenticationController.signup)
-
   app.post(
     '/login',
     AuthenticationController.login)
+
+  // videos
+  app.get(
+    '/videos',
+    VideoController.videos)
+  app.get(
+    '/videos/:videoId',
+    VideoController.watch)
+  app.get(
+    '/videos/private/:videoId',
+    isAuthenticated,
+    VideoController.watchPrivate)
 
   app.post('/upload', multer({storage: storage}).single('videoFile'), async (req, res) => {
     // body

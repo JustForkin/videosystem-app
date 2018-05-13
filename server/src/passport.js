@@ -10,11 +10,13 @@ passport.use(
   new JwtStrategy({
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
     secretOrKey: config.authentication.jwtSecret
-  }), async function (jwtPayload, done) {
+  },
+  async function (jwtPayload, done) {
     try {
+      //console.log(jwtPayload.username)
       const user = await User.findOne({
         where: {
-           id: jwtPayload.id
+           username: jwtPayload.username
         }
       })
 
@@ -26,7 +28,7 @@ passport.use(
     } catch (err) {
       return done(new Error(), false)
     }
-  }
+  })
 )
 
 module.exports = null

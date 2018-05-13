@@ -6,6 +6,8 @@ const multer = require('multer')
 const {Video} = require('./models')
 const randomstring = require('randomstring')
 
+const isAuthenticated = require('./policies/isAuthenticated')
+
 var storage = multer.diskStorage({
     destination: __dirname + '/video-uploads',
     filename: function(req, file, callback) {

@@ -15,6 +15,36 @@ var storage = multer.diskStorage({
     }
 })
 
+const fileFilter = (req, file, cb) => {
+  const mimetypes = [
+    'video/3gpp',
+    'video/mp4',
+    'video/mpeg',
+    'video/ogg',
+    'video/quicktime',
+    'video/mpeg',
+    'video/webm',
+    'video/x-m4v',
+    'video/ms-asf',
+    'video/x-ms-wmv',
+    'video/x-msvideo']
+
+  // reject a file
+  if (mimetypes.includes(file.mimetype)) {
+    cb(null, true)
+  } else {
+    cb(null, false)
+  }
+}
+
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 1024 * 1024 * 1024 * 10 // 10 GB
+  },
+  fileFilter: fileFilter
+})
+
 module.exports = (app) => {
   // authorization
   app.post(
@@ -37,11 +67,11 @@ module.exports = (app) => {
     isAuthenticated,
     VideoController.watchPrivate)
 
-  app.post('/upload', multer({storage: storage}).single('videoFile'), async (req, res) => {
+  app.post('/upload', upload.single('videoFile'), /*async*/ (req, res, next) => {
     // body
     console.log(req.body)
 
-    try {
+    /*try {
       const video = await Video.create(req.body)
       const videoJson = video.toJSON()
       res.send({
@@ -49,31 +79,12 @@ module.exports = (app) => {
       })
     } catch (err) {
       res.status(400).send({
-        error: err
+        error: 'Something went wrong: ' + err
       })
-    }
+    }*/
 
     // file
     console.log(req.file)
-
-    const mimetypes = [
-      'video/3gpp',
-      'video/mp4',
-      'video/mpeg',
-      'video/ogg',
-      'video/quicktime',
-      'video/mpeg',
-      'video/webm',
-      'video/x-m4v',
-      'video/ms-asf',
-      'video/x-ms-wmv',
-      'video/x-msvideo']
-
-    if (!mimetypes.includes(req.file.mimetype)){
-      return res.status(400).send({
-        error: 'The type of the file is not supported'
-      })
-    }
 
     if (!req.file) {
       console.log("No file received")

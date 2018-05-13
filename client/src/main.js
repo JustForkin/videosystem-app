@@ -9,6 +9,8 @@ import Vuetify from 'vuetify'
 
 import colors from 'vuetify/es5/util/colors'
 
+const InfiniteLoading = require('vue-infinite-loading');
+
 Vue.config.productionTip = false
 
 Vue.use(Vuetify, {
@@ -18,6 +20,12 @@ Vue.use(Vuetify, {
 })
 
 sync(store, router)
+
+export default {
+  components: {
+    InfiniteLoading
+  }
+}
 
 /* eslint-disable no-new */
 new Vue({

@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <h1>Start Page</h1>
+  <div row style="padding-top: 35px;">
+    <h1>Welcome to Videosystem App</h1>
   </div>
 </template>
 

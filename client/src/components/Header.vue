@@ -1,7 +1,12 @@
 <template>
   <v-toolbar>
     <!-- <v-toolbar-side-icon></v-toolbar-side-icon> -->
-    <v-btn large flat icon color="accent" to="/">
+    <v-btn
+      large
+      flat
+      icon
+      color="accent"
+      to="/">
       <v-icon>ondemand_video</v-icon>
     </v-btn>
     <v-toolbar-title class="hidden-sm-and-down">Videosystem App</v-toolbar-title>
@@ -10,12 +15,12 @@
       <!-- Login button -->
       <v-btn
         v-if="!$store.state.isUserLoggedIn"
-        to="login"
+        :to="{name: 'Login'}"
         flat>Login</v-btn>
       <!-- Sign Up Button -->
       <v-btn
         v-if="!$store.state.isUserLoggedIn"
-        to="signup"
+        :to="{name: 'SignUp'}"
         flat>Sign Up</v-btn>
       <!-- Admin account Label -->
       <div

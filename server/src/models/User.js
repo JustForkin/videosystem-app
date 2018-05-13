@@ -67,37 +67,5 @@ module.exports = (sequelize, DataTypes) => {
     return bcrypt.compareAsync(password, this.password)
   }
 
-  // Built-in admins
-  User.create({
-  	username: "admin0",
-  	password: "12345678",
-  	firstname: "Senior",
-  	lastname: "Crypt",
-  	birthday: "1995-02-01",
-  	gender: "Male",
-  	about: "Admin Zero",
-    isAdmin: true
-  })
-  User.create({
-  	username: "admin1",
-  	password: "12345678",
-  	firstname: "Uno",
-  	lastname: "Smither",
-  	birthday: "1992-11-22",
-  	gender: "Female",
-  	about: "Admin One",
-    isAdmin: true
-  })
-  User.create({
-  	username: "admin2",
-  	password: "12345678",
-  	firstname: "Smith",
-  	lastname: "Legacy",
-  	birthday: "1991-03-20",
-  	gender: "Male",
-  	about: "Admin Two",
-    isAdmin: true
-  })
-
   return User
 }

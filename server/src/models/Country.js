@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
     timestamps: false
   })
 
-  const allCountries = [
+  /*const allCountries = [
     "Afghanistan","Albania","Algeria","Andorra","Angola","Anguilla","Antigua & Barbuda",
     "Argentina","Armenia","Aruba","Australia","Austria","Azerbaijan","Bahamas","Bahrain",
     "Bangladesh","Barbados","Belarus","Belgium","Belize","Benin","Bermuda","Bhutan",
@@ -37,7 +37,7 @@ module.exports = (sequelize, DataTypes) => {
 
   for (var i = 0; i < allCountries.length; i++){
     Country.create({country : allCountries[i]})
-  }
+  }*/
 
   return Country
 }

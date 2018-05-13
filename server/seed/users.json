@@ -1,0 +1,96 @@
+[
+  {
+  	"username": "admin0",
+  	"password": "12345678",
+  	"firstname": "Senior",
+  	"lastname": "Crypt",
+  	"birthday": "1995-02-01",
+  	"gender": "Male",
+  	"about": "Admin Zero",
+    "isAdmin": true
+  },
+  {
+  	"username": "admin1",
+  	"password": "12345678",
+  	"firstname": "Uno",
+  	"lastname": "Smither",
+  	"birthday": "1992-11-22",
+  	"gender": "Female",
+  	"about": "Admin One",
+    "isAdmin": true
+  },
+  {
+    "username": "admin2",
+    "password": "12345678",
+    "firstname": "Smith",
+    "lastname": "Legacy",
+    "birthday": "1991-03-20",
+    "gender": "Male",
+    "about": "Admin Two",
+    "isAdmin": true
+  },
+  {
+    "username": "admin3",
+    "password": "12345678",
+    "firstname": "Neo",
+    "lastname": "Crawler",
+    "birthday": "1990-02-21",
+    "gender": "Male",
+    "about": "Admin Three",
+    "isAdmin": true
+  },
+  {
+    "username": "admin4",
+    "password": "12345678",
+    "firstname": "Neona",
+    "lastname": "Fact",
+    "birthday": "1997-12-01",
+    "gender": "Female",
+    "about": "Admin Four",
+    "isAdmin": true
+  },
+  {
+    "username": "user1",
+    "password": "12345678",
+    "firstname": "Reo",
+    "lastname": "Cragun",
+    "birthday": "1999-12-02",
+    "gender": "Male",
+    "about": "User One"
+  },
+  {
+    "username": "user2",
+    "password": "12345678",
+    "firstname": "Chris",
+    "lastname": "Anderson",
+    "birthday": "2000-02-09",
+    "gender": "Male",
+    "about": "User Two"
+  },
+  {
+    "username": "user3",
+    "password": "12345678",
+    "firstname": "George",
+    "lastname": "Moon",
+    "birthday": "1998-07-10",
+    "gender": "Male",
+    "about": "User Three"
+  },
+  {
+    "username": "user4",
+    "password": "12345678",
+    "firstname": "Moona",
+    "lastname": "Grimp",
+    "birthday": "1998-06-10",
+    "gender": "Female",
+    "about": "User Four"
+  },
+  {
+    "username": "user5",
+    "password": "12345678",
+    "firstname": "Spyder",
+    "birthday": "1987-06-10",
+    "gender": "Male",
+    "about": "User Five"
+  }
+]

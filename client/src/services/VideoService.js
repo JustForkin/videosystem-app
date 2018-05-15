@@ -6,5 +6,11 @@ export default {
   },
   watch (videoId) {
     return api().get(`videos/${videoId}`)
+  },
+  watchexample () {
+    return api().get(`watchexample`)
+  },
+  upload () {
+    return api().post(`upload`)
   }
 }

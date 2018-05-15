@@ -6,7 +6,6 @@ import router from './router'
 import { sync } from 'vuex-router-sync'
 import store from '@/store/store'
 import Vuetify from 'vuetify'
-
 import colors from 'vuetify/es5/util/colors'
 
 const InfiniteLoading = require('vue-infinite-loading');

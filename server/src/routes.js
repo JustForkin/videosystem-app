@@ -5,6 +5,8 @@ const VideoController = require ('./controllers/VideoController')
 const multer = require('multer')
 const {Video} = require('./models')
 const randomstring = require('randomstring')
+const progress = require('progress-stream')
+const fs = require('fs')
 
 const isAuthenticated = require('./policies/isAuthenticated')
 
@@ -15,19 +17,11 @@ var storage = multer.diskStorage({
     }
 })
 
-const fileFilter = (req, file, cb) => {
+var fileFilter = (req, file, cb) => {
   const mimetypes = [
-    'video/3gpp',
     'video/mp4',
-    'video/mpeg',
     'video/ogg',
-    'video/quicktime',
-    'video/mpeg',
-    'video/webm',
-    'video/x-m4v',
-    'video/ms-asf',
-    'video/x-ms-wmv',
-    'video/x-msvideo']
+    'video/webm']
 
   // reject a file
   if (mimetypes.includes(file.mimetype)) {
@@ -37,7 +31,9 @@ const fileFilter = (req, file, cb) => {
   }
 }
 
-const upload = multer({
+var p = progress({time: 100})
+
+var upload = multer({
   storage: storage,
   limits: {
     fileSize: 1024 * 1024 * 1024 * 10 // 10 GB
@@ -97,6 +93,39 @@ module.exports = (app) => {
       return res.send({
         success: true
       })
+    }
+  })
+
+  app.get('/watchexample', (req, res, next) => {
+    console.log('called GET watchexample/ from back-end')
+    const path = __dirname + '/video-uploads/' + '1526378034036_nzjFjx15pRM2KIVNdJFDKroxS0Sau2UF_10 Rotating Fog Cloud.mp4'
+    const stat = fs.statSync(path)
+    const fileSize = stat.size
+    const range = req.headers.range //
+
+    if (range) {
+      const parts = range.replace(/bytes=/, "").split("-")
+      const start = parseInt(parts[0], 10)
+      const end = parts[1]
+        ? parseInt(parts[1], 10)
+        : fileSize-1
+      const chunksize = (end-start)+1
+      const file = fs.createReadStream(path, {start, end})
+      const head = {
+        'Content-Range': `bytes ${start}-${end}/${fileSize}`,
+        'Accept-Ranges': 'bytes',
+        'Content-Length': chunksize,
+        'Content-Type': 'video/mp4',
+      }
+      res.writeHead(206, head);
+      file.pipe(res);
+    } else {
+      const head = {
+        'Content-Length': fileSize,
+        'Content-Type': 'video/mp4'
+      }
+      res.writeHead(200, head)
+      fs.createReadStream(path).pipe(res)
     }
   })
 }

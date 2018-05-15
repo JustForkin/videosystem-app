@@ -10,7 +10,7 @@ export default {
   watchexample () {
     return api().get(`watchexample`)
   },
-  upload () {
-    return api().post(`upload`)
+  upload (formData) {
+    return api().post(`upload`, formData)
   }
 }

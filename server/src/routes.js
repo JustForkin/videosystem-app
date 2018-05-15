@@ -63,7 +63,7 @@ module.exports = (app) => {
     isAuthenticated,
     VideoController.watchPrivate)
 
-  app.post('/upload', upload.single('videoFile'), /*async*/ (req, res, next) => {
+  app.post('/upload', isAuthenticated, upload.single('videoFile'), /*async*/ (req, res, next) => {
     // body
     console.log(req.body)
 

@@ -5,10 +5,10 @@ const VideoController = require ('./controllers/VideoController')
 const multer = require('multer')
 const {Video} = require('./models')
 const randomstring = require('randomstring')
-const progress = require('progress-stream')
 const fs = require('fs')
 
 const isAuthenticated = require('./policies/isAuthenticated')
+const isAuthenticatedJWT = require('./policies/isAuthenticatedJWT')
 
 var storage = multer.diskStorage({
     destination: __dirname + '/video-uploads',
@@ -30,8 +30,6 @@ var fileFilter = (req, file, cb) => {
     cb(null, false)
   }
 }
-
-var p = progress({time: 100})
 
 var upload = multer({
   storage: storage,

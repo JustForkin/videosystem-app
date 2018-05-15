@@ -3,6 +3,10 @@ module.exports = (sequelize, DataTypes) => {
     title: {
       type: DataTypes.STRING
     },
+    videoFile: {
+      type: DataTypes.STRING,
+      unique: true
+    },
     views: {
       type: DataTypes.INTEGER,
       defaultValue: 0

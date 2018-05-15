@@ -1,7 +1,11 @@
 <template>
   <v-layout row style="padding-top: 35px;">
     <v-flex xs12 offset-xs0 sm10 offset-sm1 md8 offset-md2 lg6 offset-lg3 xl4 offset-xl4>
-      <form v-if="!isLoading" action="http://localhost:8081/upload" enctype="multipart/form-data" method="POST">
+      <h1 v-if="isAdmin && isUserLoggedIn">You have no rights to upload being an admin</h1>
+      <h1 v-if="!isUserLoggedIn">You need to
+        <v-btn color="accent" :to="{name: 'Login'}">Login</v-btn>
+        to upload your videos</h1>
+      <form v-if="!isLoading && isUserLoggedIn && !isAdmin" action="http://localhost:8081/upload" enctype="multipart/form-data" method="POST">
         <v-layout column>
           <v-flex>
             <v-chip
@@ -42,6 +46,7 @@
 <script>
 import VideoService from '@/services/VideoService'
 import axios from 'axios'
+import {mapState} from 'vuex'
 
 export default {
   data () {
@@ -52,20 +57,28 @@ export default {
       loadingValue: 0
     }
   },
+  computed: {
+    ...mapState([
+      'isUserLoggedIn',
+      'token',
+      'isAdmin'
+    ])
+  },
   methods: {
     submit () {
-      let formData = new FormData()
       var self = this
+      let formData = new FormData()
       self.loadingValue = 0
       formData.append('videoFile', this.videoFile)
-
-      console.log(formData)
 
       const config = {
         onUploadProgress: function(progressEvent) {
           var percentCompleted = Math.round( (progressEvent.loaded * 100) / progressEvent.total )
           console.log(percentCompleted)
           self.loadingValue = percentCompleted
+        },
+        headers: {
+          'Authorization': `Bearer ${self.token}`
         }
       }
 
@@ -73,7 +86,7 @@ export default {
 
       axios.post('http://localhost:8081/upload', formData, config)
       .then(function(){
-        console.log('SUCCESS!!');
+        console.log('SUCCESS: File recieved');
         self.isLoading = false
       }).catch(function(){
         console.log('FAILURE!!');

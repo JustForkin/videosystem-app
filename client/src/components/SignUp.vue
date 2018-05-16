@@ -92,7 +92,7 @@
           multi-line
           v-model="snackbarError"
           color="error">
-          {{ error }}
+          {{ snackbarErrorMessage }}
           <v-btn flat color="" @click.native="snackbarError = false">Close</v-btn>
         </v-snackbar>
 
@@ -103,7 +103,7 @@
           multi-line
           v-model="snackbarSuccess"
           color="success">
-          {{ success }}
+          {{ snackbarSuccessMessage }}
           <v-btn flat color="" @click.native="snackbarSuccess = false">Close</v-btn>
         </v-snackbar>
 
@@ -140,15 +140,15 @@ export default {
       birthday: null,
       gender: null,
       about: null,
-      error: null,
-      success: null,
       menu: false,
       genderItems: [
         'Male',
         'Female'
       ],
       snackbarError: false,
-      snackbarSuccess: false
+      snackbarSuccess: false,
+      snackbarErrorMessage: null,
+      snackbarSuccessMessage: null
     }
   },
   watch: {
@@ -173,13 +173,13 @@ export default {
         this.$store.dispatch('setUser', response.data.user)
 
         if (response.data.token) {
-          this.success = 'You registered successfully. Welcome to Videosystem App'
+          this.snackbarSuccessMessage = 'You registered successfully. Welcome to Videosystem App'
           this.snackbarSuccess = true
         }
       } catch (error) {
-        this.error = error.response.data.error
-        if (this.error) {
-          this.snackbarError = true;
+        this.snackbarErrorMessage = error.response.data.error
+        if (this.snackbarErrorMessage) {
+          this.snackbarError = true
         }
       }
     },

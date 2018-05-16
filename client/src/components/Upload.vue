@@ -3,11 +3,17 @@
     <v-flex xs12 offset-xs0 sm10 offset-sm1 md8 offset-md2 lg6 offset-lg3 xl4 offset-xl4>
       <h1 v-if="isAdmin && isUserLoggedIn">You have no rights to upload being an admin</h1>
       <h1 v-if="!isUserLoggedIn">You need to
-        <v-btn color="accent" :to="{name: 'Login'}">Login</v-btn>
+        <v-btn color="accent" :to="{name: 'Login'}">Login</v-btn> or
+        <v-btn color="accent" :to="{name: 'SignUp'}">Sign Up</v-btn>
         to upload your videos
       </h1>
-      <form v-if="!isLoading && isUserLoggedIn && !isAdmin" action="http://localhost:8081/upload" enctype="multipart/form-data" method="POST">
-        
+      <form
+        autocomplete="off"
+        v-if="!isLoading && isUserLoggedIn && !isAdmin"
+        action="http://localhost:8081/upload"
+        enctype="multipart/form-data" method="POST">
+        <h1>Upload a video</h1><br>
+        <!-- Video file picker -->
         <v-layout column>
           <v-flex>
             <v-chip
@@ -26,6 +32,23 @@
             @change="onFilePicked">
         </v-layout>
         <br>
+        <!-- Title -->
+        <v-text-field
+            label="Title"
+            v-model="title"
+            :rules="titleRules"
+            :counter="30"
+            required>
+        </v-text-field>
+        <!-- Description  -->
+        <v-text-field
+            name="description"
+            label="Description"
+            v-model="description"
+            multi-line>
+        </v-text-field>
+        <br>
+        <!-- Submit -->
         <v-btn
           class="accent"
           @click="submit">
@@ -56,7 +79,18 @@ export default {
       videoFile: null,
       videoFileName: '',
       isLoading: false,
-      loadingValue: 0
+      loadingValue: 0,
+      title: '',
+      titleRules: [
+        v => !!v || 'Title is required',
+        v => (v && v.length <= 30) || 'Title maximum characters size is 30',
+        v => (v && v.length >= 1) || 'Title must contain at least 1 character'
+      ],
+      description: null,
+      snackbarError: false,
+      snackbarSuccess: false,
+      snackbarErrorMessage: null,
+      snackbarSuccessMessage: null
     }
   },
   computed: {
@@ -68,10 +102,28 @@ export default {
   },
   methods: {
     submit () {
+      if (!this.title){
+        return
+      }
+
+      if (!this.videoFile){
+        this.snackbarErrorMessage = 'Video file is required'
+        this.snackbarError = true
+        return
+      }
+
+      if (!(this.videoFile.type == "video/mp4" ||
+          this.videoFile.type == "video/webm" ||
+          this.videoFile.type == "video/ogg")){
+        this.snackbarErrorMessage = 'Video file type must be .mp4 or .ogg'
+        this.snackbarError = true
+        return
+      }
+
       var self = this
       let formData = new FormData()
       self.loadingValue = 0
-      formData.append('videoFile', this.videoFile)
+      formData.append('videoFile', self.videoFile)
 
       const config = {
         onUploadProgress: function(progressEvent) {

@@ -8,6 +8,8 @@ import store from '@/store/store'
 import Vuetify from 'vuetify'
 import colors from 'vuetify/es5/util/colors'
 
+// import Snackbar from '@/components/globals/Snackbar'
+
 const InfiniteLoading = require('vue-infinite-loading');
 
 Vue.config.productionTip = false
@@ -17,6 +19,8 @@ Vue.use(Vuetify, {
     accent: colors.red.accent3
   }
 })
+
+// Vue.component('snackbar', Snackbar)
 
 sync(store, router)
 
@@ -32,5 +36,8 @@ new Vue({
   router,
   store,
   components: { App },
-  template: '<App/>'
+  template: '<App/>',
+  methods: {
+
+  }
 })

@@ -4,8 +4,10 @@
       <h1 v-if="isAdmin && isUserLoggedIn">You have no rights to upload being an admin</h1>
       <h1 v-if="!isUserLoggedIn">You need to
         <v-btn color="accent" :to="{name: 'Login'}">Login</v-btn>
-        to upload your videos</h1>
+        to upload your videos
+      </h1>
       <form v-if="!isLoading && isUserLoggedIn && !isAdmin" action="http://localhost:8081/upload" enctype="multipart/form-data" method="POST">
+        
         <v-layout column>
           <v-flex>
             <v-chip

@@ -14,26 +14,32 @@
     <v-toolbar-items class="">
       <!-- Login button -->
       <v-btn
-        v-if="!$store.state.isUserLoggedIn"
+        v-if="!isUserLoggedIn"
         :to="{name: 'Login'}"
         flat>Login</v-btn>
       <!-- Sign Up Button -->
       <v-btn
-        v-if="!$store.state.isUserLoggedIn"
+        v-if="!isUserLoggedIn"
         :to="{name: 'SignUp'}"
         flat>Sign Up</v-btn>
       <!-- Admin account Label -->
       <div
-        v-if="$store.state.isAdmin && $store.state.isUserLoggedIn"
+        v-if="isAdmin && isUserLoggedIn"
         style="margin: auto;"
         class="text-xs-center">
         <v-chip small outline color="accent">
           <v-icon left>build</v-icon>Admin account
         </v-chip>
       </div>
+      <!-- Upload button -->
+      <v-btn
+        v-if="isUserLoggedIn && !isAdmin"
+        :to="{name: 'Upload'}"
+        flat>
+        Upload</v-btn>
       <!-- Log Out Button -->
       <v-btn
-        v-if="$store.state.isUserLoggedIn"
+        v-if="isUserLoggedIn"
         @click="logout"
         flat>Log Out</v-btn>
     </v-toolbar-items>
@@ -41,6 +47,8 @@
 </template>
 
 <script>
+import {mapState} from 'vuex'
+
 export default {
   methods: {
     logout () {
@@ -52,6 +60,12 @@ export default {
         name: 'Start'
       })
     }
+  },
+  computed: {
+    ...mapState([
+      'isUserLoggedIn',
+      'isAdmin'
+    ])
   }
 }
 </script>

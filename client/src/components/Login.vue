@@ -27,8 +27,7 @@ export default {
   data () {
     return {
       username: '',
-      password: '',
-      error: null
+      password: ''
     }
   },
   methods: {
@@ -41,11 +40,23 @@ export default {
         console.log(response.data)
         this.$store.dispatch('setToken', response.data.token)
         this.$store.dispatch('setUser', response.data.user)
+
+        var hiMessage = (response.data.user.isAdmin) ?
+        'Hi, ' + response.data.user.username + ' (You are an admin by the way)' :
+        'Hi again, ' + response.data.user.username
+
+        this.$store.dispatch('setSnack', {
+          snack: hiMessage,
+          snackColor: 'success'
+        })
         this.$router.push({
           name: 'Videos'
         })
       } catch (error) {
-        this.error = error.response.data.error
+        // this.error = error.response.data.error
+        this.$store.dispatch('setSnack', {
+          snack: error.response.data.error
+        })
       }
     }
   }

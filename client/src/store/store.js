@@ -13,7 +13,9 @@ export default new Vuex.Store({
     token: null,
     user: null,
     isUserLoggedIn: false,
-    isAdmin: false
+    isAdmin: false,
+    snack: '',
+    snackColor: ''
   },
   mutations: {
     setToken (state, token) {
@@ -33,6 +35,13 @@ export default new Vuex.Store({
       } else {
         state.isAdmin = false
       }
+    },
+    setSnack (state, payload) {
+      if (!payload.snackColor){
+        payload.snackColor = 'error'
+      }
+      state.snack = payload.snack
+      state.snackColor = payload.snackColor
     }
   },
   actions: {
@@ -41,6 +50,9 @@ export default new Vuex.Store({
     },
     setUser ({commit}, user) {
       commit('setUser', user)
+    },
+    setSnack ({commit}, payload) {
+      commit('setSnack', payload)
     }
   }
 })

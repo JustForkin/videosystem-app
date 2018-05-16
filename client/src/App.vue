@@ -2,6 +2,7 @@
   <div id="app">
     <v-app>
       <page-header />
+      <snackbar />
       <main>
         <v-container fluid>
           <router-view></router-view>
@@ -17,11 +18,13 @@
 // import './assets/scss/spectre-icons.scss'
 
 import PageHeader from '@/components/Header.vue'
+import Snackbar from '@/components/Snackbar.vue'
 
 export default {
   name: 'App',
   components: {
-    PageHeader
+    PageHeader,
+    Snackbar
   }
 }
 </script>

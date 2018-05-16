@@ -1,7 +1,12 @@
 <template>
   <v-layout row style="padding-top: 35px;">
     <v-flex xs12 offset-xs0 sm10 offset-sm1 md8 offset-md2 lg6 offset-lg3 xl4 offset-xl4>
-      <form autocomplete="off">
+      <h1 v-if="isUserLoggedIn">
+        You are already registered and logged in
+      </h1>
+      <form
+        v-if="!isUserLoggedIn"
+        autocomplete="off">
         <h1>Sign Up</h1>
         <!-- Username input -->
         <v-text-field
@@ -84,29 +89,6 @@
           @click="signup">
           Continue
         </v-btn>
-
-        <!-- Snackbar Error -->
-        <v-snackbar
-          top
-          left
-          multi-line
-          v-model="snackbarError"
-          color="error">
-          {{ snackbarErrorMessage }}
-          <v-btn flat color="" @click.native="snackbarError = false">Close</v-btn>
-        </v-snackbar>
-
-        <!-- Snackbar Success -->
-        <v-snackbar
-          top
-          left
-          multi-line
-          v-model="snackbarSuccess"
-          color="success">
-          {{ snackbarSuccessMessage }}
-          <v-btn flat color="" @click.native="snackbarSuccess = false">Close</v-btn>
-        </v-snackbar>
-
       </form>
     </v-flex>
   </v-layout>
@@ -114,6 +96,7 @@
 
 <script>
 import AuthenticationService from '@/services/AuthenticationService'
+import {mapState} from 'vuex'
 
 export default {
   data () {
@@ -144,12 +127,14 @@ export default {
       genderItems: [
         'Male',
         'Female'
-      ],
-      snackbarError: false,
-      snackbarSuccess: false,
-      snackbarErrorMessage: null,
-      snackbarSuccessMessage: null
+      ]
     }
+  },
+  computed: {
+    ...mapState([
+      'isUserLoggedIn',
+      'isAdmin'
+    ])
   },
   watch: {
     menu (val) {
@@ -173,14 +158,18 @@ export default {
         this.$store.dispatch('setUser', response.data.user)
 
         if (response.data.token) {
-          this.snackbarSuccessMessage = 'You registered successfully. Welcome to Videosystem App'
-          this.snackbarSuccess = true
+          this.$store.dispatch('setSnack', {
+            snack: 'You registered successfully. Welcome to Videosystem App',
+            snackColor: 'success'
+          })
+          this.$router.push({
+            name: 'Videos'
+          })
         }
       } catch (error) {
-        this.snackbarErrorMessage = error.response.data.error
-        if (this.snackbarErrorMessage) {
-          this.snackbarError = true
-        }
+        this.$store.dispatch('setSnack', {
+          snack: error.response.data.error
+        })
       }
     },
     save (birthday) {

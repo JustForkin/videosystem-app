@@ -86,37 +86,39 @@ export default {
         v => (v && v.length <= 30) || 'Title maximum characters size is 30',
         v => (v && v.length >= 1) || 'Title must contain at least 1 character'
       ],
-      description: null,
-      snackbarError: false,
-      snackbarSuccess: false,
-      snackbarErrorMessage: null,
-      snackbarSuccessMessage: null
+      description: null
     }
   },
   computed: {
     ...mapState([
       'isUserLoggedIn',
       'token',
-      'isAdmin'
+      'isAdmin',
+      'snack'
     ])
   },
   methods: {
     submit () {
       if (!this.title){
+        this.$store.dispatch('setSnack', {
+          snack: 'Title is required'
+        })
         return
       }
 
       if (!this.videoFile){
-        this.snackbarErrorMessage = 'Video file is required'
-        this.snackbarError = true
+        this.$store.dispatch('setSnack', {
+          snack: 'Video file is required'
+        })
         return
       }
 
       if (!(this.videoFile.type == "video/mp4" ||
           this.videoFile.type == "video/webm" ||
           this.videoFile.type == "video/ogg")){
-        this.snackbarErrorMessage = 'Video file type must be .mp4 or .ogg'
-        this.snackbarError = true
+        this.$store.dispatch('setSnack', {
+          snack: 'Video file type must be .mp4 or .ogg'
+        })
         return
       }
 

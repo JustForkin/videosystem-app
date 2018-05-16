@@ -92,5 +92,12 @@
     "birthday": "1987-06-10",
     "gender": "Male",
     "about": "User Five"
+  },
+  {
+    "username": "user6",
+    "password": "12345678",
+    "firstname": "Spenser",
+    "gender": "Male",
+    "about": "User Six"
   }
 ]

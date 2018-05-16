@@ -28,9 +28,20 @@
         style="margin: auto;"
         class="text-xs-center">
         <v-chip small outline color="accent">
-          <v-icon left>build</v-icon>Admin account
+          <v-icon left>build</v-icon>{{user.username}}
         </v-chip>
       </div>
+
+      <!-- User account Label -->
+      <div
+        v-if="!isAdmin && isUserLoggedIn"
+        style="margin: auto;"
+        class="text-xs-center">
+        <v-chip small outline color="accent">
+          <v-icon left>perm_identity</v-icon>{{user.username}}
+        </v-chip>
+      </div>
+
       <!-- Upload button -->
       <v-btn
         v-if="isUserLoggedIn && !isAdmin"
@@ -64,7 +75,8 @@ export default {
   computed: {
     ...mapState([
       'isUserLoggedIn',
-      'isAdmin'
+      'isAdmin',
+      'user'
     ])
   }
 }

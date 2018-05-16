@@ -47,6 +47,25 @@
             v-model="description"
             multi-line>
         </v-text-field>
+        <!-- Country -->
+        <v-layout row wrap>
+          <v-flex xs12>
+            <v-select
+              :items="countries"
+              :filter="customFilter"
+              v-model="country"
+              item-text="country"
+              label="Country"
+              autocomplete
+              required
+            ></v-select>
+          </v-flex>
+        </v-layout>
+        <!-- isPublic -->
+        <v-switch
+          :label="`Public access to video: ${isPublic}`"
+          v-model="isPublic">
+        </v-switch>
         <br>
         <!-- Submit -->
         <v-btn
@@ -70,6 +89,7 @@
 
 <script>
 import VideoService from '@/services/VideoService'
+import CountryService from '@/services/CountryService'
 import axios from 'axios'
 import {mapState} from 'vuex'
 
@@ -86,7 +106,20 @@ export default {
         v => (v && v.length <= 30) || 'Title maximum characters size is 30',
         v => (v && v.length >= 1) || 'Title must contain at least 1 character'
       ],
-      description: null
+      description: null,
+      isPublic: true,
+      country: null,
+      countries: [
+        { country: 'Florida', id: 1 }
+      ],
+      customFilter (item, queryText, itemText) {
+        const hasValue = val => val != null ? val : ''
+        const text = hasValue(item.country)
+        const query = hasValue(queryText)
+        return text.toString()
+          .toLowerCase()
+          .indexOf(query.toString().toLowerCase()) > -1
+      }
     }
   },
   computed: {
@@ -122,10 +155,23 @@ export default {
         return
       }
 
+      if (!this.country){
+        this.$store.dispatch('setSnack', {
+          snack: 'Country is required'
+        })
+        return
+      }
+
       var self = this
       let formData = new FormData()
       self.loadingValue = 0
       formData.append('videoFile', self.videoFile)
+      formData.append('title', self.title)
+      formData.append('countryId', self.country.id)
+      formData.append('isPublic', self.isPublic)
+      if (self.description) {
+        formData.append('description', self.description)
+      }
 
       const config = {
         onUploadProgress: function(progressEvent) {
@@ -141,13 +187,25 @@ export default {
       self.isLoading = true
 
       axios.post('http://localhost:8081/upload', formData, config)
-      .then(function(){
-        console.log('SUCCESS: File recieved');
-        self.isLoading = false
-      }).catch(function(){
-        console.log('FAILURE!!');
-        self.isLoading = false
-      })
+        .then((response) => {
+          self.isLoading = false
+		      console.log(response.data)
+
+          this.$store.dispatch('setSnack', {
+            snack: 'Congrats! Your video has uploaded successfully',
+            snackColor: 'success'
+          })
+          this.$router.push({
+            name: 'Videos'
+          })
+	      })
+        .catch((error) => {
+          self.isLoading = false
+          console.log(error)
+          this.$store.dispatch('setSnack', {
+            snack: error.response.data.error
+          })
+        })
     },
 
     onPickFile () {
@@ -164,6 +222,16 @@ export default {
         this.videoFile = null
         this.videoFileName = null
       }
+    }
+  },
+  async mounted () {
+    try {
+      const response = await CountryService.countries()
+      this.countries = response.data
+    } catch (error) {
+      this.$store.dispatch('setSnack', {
+        snack: error.response.data.error
+      })
     }
   }
 }

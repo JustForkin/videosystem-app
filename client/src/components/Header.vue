@@ -66,6 +66,11 @@ export default {
       this.$store.dispatch('setToken', null)
       this.$store.dispatch('setUser', null)
 
+      this.$store.dispatch('setSnack', {
+        snack: 'Goodbye :)',
+        snackColor: 'success'
+      })
+
       // redirect to homepage
       this.$router.push({
         name: 'Start'
@@ -76,7 +81,8 @@ export default {
     ...mapState([
       'isUserLoggedIn',
       'isAdmin',
-      'user'
+      'user',
+      'snack'
     ])
   }
 }

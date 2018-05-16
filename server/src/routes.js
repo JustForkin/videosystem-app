@@ -1,6 +1,8 @@
 const AuthenticationController = require ('./controllers/AuthenticationController')
 const AuthenticationControllerPolicy = require ('./policies/AuthenticationControllerPolicy')
 
+const CountryController = require ('./controllers/CountryController')
+
 const VideoController = require ('./controllers/VideoController')
 const multer = require('multer')
 const {Video} = require('./models')
@@ -8,7 +10,6 @@ const randomstring = require('randomstring')
 const fs = require('fs')
 
 const isAuthenticated = require('./policies/isAuthenticated')
-const isAuthenticatedJWT = require('./policies/isAuthenticatedJWT')
 
 var storage = multer.diskStorage({
     destination: __dirname + '/video-uploads',
@@ -49,6 +50,11 @@ module.exports = (app) => {
     '/login',
     AuthenticationController.login)
 
+  // countries
+  app.post(
+    '/countries',
+    CountryController.countries)
+
   // videos
   app.get(
     '/videos',
@@ -56,47 +62,25 @@ module.exports = (app) => {
   app.get(
     '/videos/:videoId',
     VideoController.watch)
+  app.post(
+    '/videos/:videoId',
+    VideoController.watchInfo)
+  app.post(
+    '/like/:videoId',
+    VideoController.like)
   app.get(
     '/videos/private/:videoId',
     isAuthenticated,
     VideoController.watchPrivate)
-
-  app.post('/upload', isAuthenticated, upload.single('videoFile'), /*async*/ (req, res, next) => {
-    // body
-    console.log(req.body)
-
-    /*try {
-      const video = await Video.create(req.body)
-      const videoJson = video.toJSON()
-      res.send({
-        video: videoJson
-      })
-    } catch (err) {
-      res.status(400).send({
-        error: 'Something went wrong: ' + err
-      })
-    }*/
-
-    // file
-    console.log(req.file)
-
-    if (!req.file) {
-      console.log("No file received")
-      return res.send({
-        success: false
-      })
-
-    } else {
-      console.log('File received')
-      return res.send({
-        success: true
-      })
-    }
-  })
+  app.post(
+    '/upload',
+    isAuthenticated,
+    upload.single('videoFile'),
+    VideoController.upload)
 
   app.get('/watchexample', (req, res, next) => {
     console.log('called GET watchexample/ from back-end')
-    const path = __dirname + '/video-uploads/' + '1526378034036_nzjFjx15pRM2KIVNdJFDKroxS0Sau2UF_10 Rotating Fog Cloud.mp4'
+    const path = __dirname + '/video-uploads/' + '1526503039050_O5TilY0rkQUb1ekMpFmNoUOKwgviIOOC_16 Thick Cloud.mp4'
     const stat = fs.statSync(path)
     const fileSize = stat.size
     const range = req.headers.range //

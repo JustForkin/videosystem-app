@@ -13,7 +13,10 @@ module.exports = {
           where: {
             title: { [Op.like]: `%${search}%` },
             isPublic: true
-          }
+          },
+          order: [
+            ['id', 'DESC']
+          ]
         })
       } else {
         videos = await Video.findAll({
@@ -44,7 +47,7 @@ module.exports = {
   },
 
   async like (req, res) {
-    
+
   },
 
   async watchInfo (req, res){

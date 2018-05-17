@@ -1,6 +1,22 @@
 <template>
   <v-layout row style="padding-top: 35px;">
     <v-flex xs12 offset-xs0 sm10 offset-sm1 md8 offset-md2 lg6 offset-lg3 xl4 offset-xl4>
+      <v-layout row>
+        <v-flex xs6 offset-xs0>
+          <v-switch small
+            label="Sort by: upload date">
+          </v-switch>
+        </v-flex>
+        <v-flex xs6>
+          <v-text-field
+             v-model="search"
+             append-icon="search"
+             label="Search"
+             single-line
+             hide-details
+           ></v-text-field>
+        </v-flex>
+      </v-layout>
       <div
         class="videos-list"
         v-for="video in videos"
@@ -78,7 +94,9 @@ export default {
     InfiniteLoading
   },
   async mounted () {
-    this.videos = (await VideoService.videos()).data
+    this.videos = (await VideoService.videos()).data.sort(function (a, b) {
+      return b.id - a.id
+    })
   }
 }
 </script>

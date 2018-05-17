@@ -70,6 +70,10 @@ module.exports = (app) => {
     isAuthenticated,
     VideoController.addLike)
   app.post(
+    '/videos/:videoId/pointsByUser',
+    isAuthenticated,
+    VideoController.pointsByUser)
+  app.post(
     '/videos/:videoId/addView',
     VideoController.addView)
   app.get(

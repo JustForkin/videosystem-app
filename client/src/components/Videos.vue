@@ -1,7 +1,7 @@
 <template>
   <v-layout row style="padding-top: 35px;">
     <v-flex xs12 offset-xs0 sm10 offset-sm1 md8 offset-md2 lg6 offset-lg3 xl4 offset-xl4>
-      <v-layout row>
+      <!-- <v-layout row>
         <v-flex xs6 offset-xs0>
           <v-switch small
             label="Sort by: upload date">
@@ -16,7 +16,7 @@
              hide-details
            ></v-text-field>
         </v-flex>
-      </v-layout>
+      </v-layout> -->
       <div
         class="videos-list"
         v-for="video in videos"

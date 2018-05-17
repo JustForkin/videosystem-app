@@ -60,18 +60,74 @@ module.exports = {
 
       if (currLikes) {
         // ALREADY SET: remove like
-        
+        await LikedVideo.destroy({
+          where: {
+            id: req.params.videoId,
+            username: req.user.username
+          }
+        })
+
+        res.send({like: -1, dislike: 0})
       } else {
         // NOT SET: add like
+        const currDislikes = await DislikedVideo.findOne({
+          where: {
+            id: req.params.videoId,
+            username: req.user.username
+          }
+        })
 
+        if (currDislikes) {
+          await DislikedVideo.destroy({
+            where: {
+              id: req.params.videoId,
+              username: req.user.username
+            }
+          })
+        }
+
+        await LikedVideo.create({
+          username: req.user.username,
+          id: req.params.videoId
+        })
+
+        res.send({
+          like: 1,
+          dislike: (currDislikes) ? -1 : 0
+        })
+      }
+    } catch (err) {
+      res.status(400).send({
+        error: err
+      })
+    }
+  },
+
+  async pointsByUser (req, res) {
+    try {
+      const currLikes = await LikedVideo.findOne({
+        where: {
+          id: req.params.videoId,
+          username: req.user.username
+        }
+      })
+
+      const currDislikes = await DislikedVideo.findOne({
+        where: {
+          id: req.params.videoId,
+          username: req.user.username
+        }
+      })
+
+      if (currLikes) {
+        res.send({liked: true, disliked: false})
       }
 
-      /*const like = await LikedVideo.create({
-        username: req.user.username,
-        id: req.params.videoId
-      })*/
+      if (currDislikes) {
+        res.send({liked: false, disliked: true})
+      }
 
-      //res.send('+1 like from you')
+      res.send({liked: false, disliked: false})
     } catch (err) {
       res.status(400).send({
         error: err

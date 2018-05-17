@@ -83,19 +83,15 @@ export default {
         })
           .then((response) => {
             console.log(response.data)
-            this.video.likes += 1
+            this.video.likes += response.data.like
+            this.alreadyLiked = (response.data.like > 0)
+            this.video.dislikes += response.data.dislike
+            this.alreadyDisliked = false
           })
           .catch((error) => {
-            // console.log(error)
-            if (error.response.data.error == 'SequelizeUniqueConstraintError: Validation error'){
-              this.$store.dispatch('setSnack', {
-                snack: 'You have already liked the video'
-              })
-            } else {
-              this.$store.dispatch('setSnack', {
-                snack: error.response.data.error
-              })
-            }
+            this.$store.dispatch('setSnack', {
+              snack: error.response.data.error
+            })
           })
       } else {
         if (this.isUserLoggedIn && this.isAdmin){
@@ -111,13 +107,34 @@ export default {
       }
     },
     async dislike(){
-      
+
     }
   },
   async mounted () {
     this.src += this.$route.params.videoId
+    var self = this
 
-    await axios.post(this.src)
+    await axios.post(self.src).then((response) => {
+      self.video = response.data
+
+      axios.post(self.src + '/addView')
+        .then((response) => {
+        })
+    })
+
+    if ((self.isUserLoggedIn && !self.isAdmin)) {
+      await axios.post(self.src + '/pointsByUser', null, {headers: {'Authorization': `Bearer ${self.token}`}})
+      .then((response) => {
+        console.log(response.data)
+        if (response.data.liked) {
+          self.alreadyLiked = true
+        }
+        if (response.data.disliked) {
+          self.alreadyDisliked = true
+        }
+      })
+    }
+    /*await axios.post(this.src)
       .then((response) => {
         console.log(response.data)
         this.video = response.data
@@ -136,6 +153,25 @@ export default {
       .catch((error) => {
         console.log(error)
       })
+
+    await axios.post(this.src + '/pointsByUser', null, {
+      headers: {
+        'Authorization': `Bearer ${this.token}`
+      }
+    })
+      .then((response) => {
+        console.log(response.data)
+        if (response.data.liked) {
+          this.alreadyLiked = true
+        }
+        if (response.data.disliked) {
+          this.alreadyDisliked = true
+        }
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+    */
   },
   computed: {
     ...mapState([

@@ -55,6 +55,24 @@ sequelize.sync({force: true})
       'FOR EACH ROW ' +
       'EXECUTE PROCEDURE "trace_likes_f"();')
 
+    // Likes back trigger
+    sequelize.query(
+      '﻿CREATE OR REPLACE FUNCTION "trace_likes_back_f"() ' +
+      'RETURNS TRIGGER AS $$ ' +
+      'BEGIN ' +
+      'UPDATE "Videos" ' +
+      'SET "likes" = "likes" - 1 ' +
+      'WHERE "Videos"."id" = OLD."id"; ' +
+      'RETURN NEW; ' +
+      'END; ' +
+      '$$ LANGUAGE PLPGSQL; ' +
+
+      'CREATE TRIGGER "trace_likes_back" ' +
+      'AFTER DELETE ' +
+      'ON "LikedVideos" ' +
+      'FOR EACH ROW ' +
+      'EXECUTE PROCEDURE "trace_likes_back_f"();')
+
     // disLikes trigger
     sequelize.query(
       '﻿CREATE OR REPLACE FUNCTION "trace_dislikes_f"() ' +
@@ -72,6 +90,24 @@ sequelize.sync({force: true})
       'ON "DislikedVideos" ' +
       'FOR EACH ROW ' +
       'EXECUTE PROCEDURE "trace_dislikes_f"();')
+
+    // disLikes trigger
+    sequelize.query(
+      '﻿CREATE OR REPLACE FUNCTION "trace_dislikes_back_f"() ' +
+      'RETURNS TRIGGER AS $$ ' +
+      'BEGIN ' +
+      'UPDATE "Videos" ' +
+      'SET "dislikes" = "dislikes" - 1 ' +
+      'WHERE "Videos"."id" = OLD."id"; ' +
+      'RETURN NEW; ' +
+      'END; ' +
+      '$$ LANGUAGE PLPGSQL; ' +
+
+      'CREATE TRIGGER "trace_dislikes_back" ' +
+      'AFTER DELETE ' +
+      'ON "DislikedVideos" ' +
+      'FOR EACH ROW ' +
+      'EXECUTE PROCEDURE "trace_dislikes_back_f"();')
 
     await Promise.all(
       likedVideos.map(likedVideo => {

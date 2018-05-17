@@ -9,7 +9,7 @@
         Your browser does not support the video tag.
       </video>
       <v-layout row class="mt-3">
-        <v-flex xs9>
+        <v-flex xs8>
           <h1>{{video.title}}</h1>
           <p>by
             <v-chip small color="">
@@ -18,11 +18,13 @@
           </p>
           <p>{{video.description}}</p>
         </v-flex>
-        <v-flex xs3 offset-xs0>
+        <v-flex xs4 offset-xs0>
           <v-layout column d-inline-flex>
             <v-btn
               flat
               icon
+              :outline="alreadyLiked"
+              fab
               color="success"
               @click="like">
               <v-icon flat color="success">thumb_up</v-icon>
@@ -33,6 +35,8 @@
             <v-btn
               flat
               icon
+              fab
+              :outline="alreadyDisliked"
               color="error"
               @click="dislike">
               <v-icon flat color="error">thumb_down</v-icon>
@@ -43,6 +47,7 @@
             <v-btn
               flat
               icon
+              fab
               color="blue">
               <v-icon flat color="blue">play_arrow</v-icon>
             </v-btn>
@@ -63,18 +68,34 @@ export default {
   data () {
     return {
       src: 'http://localhost:8081/videos/',
-      video: null
+      video: null,
+      alreadyLiked: false,
+      alreadyDisliked: false
     }
   },
   methods: {
     async like () {
       if (this.isUserLoggedIn && !this.isAdmin){
-        await axios.post(this.src + '/addLike')
+        await axios.post(this.src + '/addLike', null, {
+          headers: {
+            'Authorization': `Bearer ${this.token}`
+          }
+        })
           .then((response) => {
             console.log(response.data)
+            this.video.likes += 1
           })
           .catch((error) => {
-            console.log(error)
+            // console.log(error)
+            if (error.response.data.error == 'SequelizeUniqueConstraintError: Validation error'){
+              this.$store.dispatch('setSnack', {
+                snack: 'You have already liked the video'
+              })
+            } else {
+              this.$store.dispatch('setSnack', {
+                snack: error.response.data.error
+              })
+            }
           })
       } else {
         if (this.isUserLoggedIn && this.isAdmin){
@@ -88,6 +109,9 @@ export default {
           snack: 'Login to be able to like / dislike'
         })
       }
+    },
+    async dislike(){
+      
     }
   },
   async mounted () {

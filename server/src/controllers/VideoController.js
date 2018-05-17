@@ -51,15 +51,30 @@ module.exports = {
 
   async addLike (req, res) {
     try {
-      const like = await LikedVideo.create({
-        username: req.user.username,
-        id: req.params.videoId
+      const currLikes = await LikedVideo.findOne({
+        where: {
+          id: req.params.videoId,
+          username: req.user.username
+        }
       })
 
-      res.send('+1 like from you')
+      if (currLikes) {
+        // ALREADY SET: remove like
+        
+      } else {
+        // NOT SET: add like
+
+      }
+
+      /*const like = await LikedVideo.create({
+        username: req.user.username,
+        id: req.params.videoId
+      })*/
+
+      //res.send('+1 like from you')
     } catch (err) {
       res.status(400).send({
-        error: 'Something went wrong: ' + err
+        error: err
       })
     }
   },

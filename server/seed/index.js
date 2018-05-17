@@ -3,7 +3,9 @@ const {
   Country,
   User,
   Video,
-  LikedVideo
+  LikedVideo,
+  DislikedVideo,
+  WatchLater
 } = require('../src/models')
 
 const Promise = require('bluebird')
@@ -12,6 +14,8 @@ const countries = require('./countries.json')
 const users = require('./users.json')
 const videos = require('./videos.json')
 const likedVideos = require('./likedVideos.json')
+const dislikedVideos = require('./dislikedVideos.json')
+const watchLater = require('./watchLater.json')
 
 sequelize.sync({force: true})
   .then(async function () {
@@ -51,9 +55,39 @@ sequelize.sync({force: true})
       'FOR EACH ROW ' +
       'EXECUTE PROCEDURE "trace_likes_f"();')
 
+    // disLikes trigger
+    sequelize.query(
+      '﻿CREATE OR REPLACE FUNCTION "trace_dislikes_f"() ' +
+      'RETURNS TRIGGER AS $$ ' +
+      'BEGIN ' +
+      'UPDATE "Videos" ' +
+      'SET "dislikes" = "dislikes" + 1 ' +
+      'WHERE "Videos"."id" = NEW."id"; ' +
+      'RETURN NEW; ' +
+      'END; ' +
+      '$$ LANGUAGE PLPGSQL; ' +
+
+      'CREATE TRIGGER "trace_dislikes" ' +
+      'AFTER INSERT ' +
+      'ON "DislikedVideos" ' +
+      'FOR EACH ROW ' +
+      'EXECUTE PROCEDURE "trace_dislikes_f"();')
+
     await Promise.all(
       likedVideos.map(likedVideo => {
         LikedVideo.create(likedVideo)
+      })
+    )
+
+    await Promise.all(
+      dislikedVideos.map(dislikedVideo => {
+        DislikedVideo.create(dislikedVideo)
+      })
+    )
+
+    await Promise.all(
+      watchLater.map(watchLater => {
+        WatchLater.create(watchLater)
       })
     )
   })

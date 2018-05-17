@@ -24,7 +24,6 @@
               flat
               icon
               color="success"
-              to=""
               @click="like">
               <v-icon flat color="success">thumb_up</v-icon>
             </v-btn>
@@ -35,7 +34,7 @@
               flat
               icon
               color="error"
-              to="">
+              @click="dislike">
               <v-icon flat color="error">thumb_down</v-icon>
             </v-btn>
             {{video.dislikes}}
@@ -44,8 +43,7 @@
             <v-btn
               flat
               icon
-              color="blue"
-              to="">
+              color="blue">
               <v-icon flat color="blue">play_arrow</v-icon>
             </v-btn>
             {{video.views}}
@@ -71,7 +69,24 @@ export default {
   methods: {
     async like () {
       if (this.isUserLoggedIn && !this.isAdmin){
-        
+        await axios.post(this.src + '/addLike')
+          .then((response) => {
+            console.log(response.data)
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+      } else {
+        if (this.isUserLoggedIn && this.isAdmin){
+          this.$store.dispatch('setSnack', {
+            snack: 'Admins are not able to like / dislike'
+          })
+          return
+        }
+
+        this.$store.dispatch('setSnack', {
+          snack: 'Login to be able to like / dislike'
+        })
       }
     }
   },
@@ -88,6 +103,14 @@ export default {
         this.$store.dispatch('setSnack', {
           snack: error.response.data.error
         })
+      })
+
+    await axios.post(this.src + '/addView')
+      .then((response) => {
+        console.log(response.data)
+      })
+      .catch((error) => {
+        console.log(error)
       })
   },
   computed: {

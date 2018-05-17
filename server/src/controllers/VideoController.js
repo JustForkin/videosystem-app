@@ -1,4 +1,4 @@
-const {Video} = require('../models')
+const {Video, LikedVideo, DislikedVideo, WatchLater} = require('../models')
 const Sequelize = require('sequelize')
 const Op = Sequelize.Op
 const fs = require('fs')
@@ -22,7 +22,10 @@ module.exports = {
         videos = await Video.findAll({
           where: {
             isPublic: true
-          }
+          },
+          order: [
+            ['id', 'DESC']
+          ]
         })
       }
 
@@ -46,8 +49,27 @@ module.exports = {
     }
   },
 
-  async like (req, res) {
+  async addLike (req, res) {
+    try {
+      const like = await LikedVideo.create({
+        username: req.user.username,
+        id: req.params.videoId
+      })
 
+      res.send('+1 like from you')
+    } catch (err) {
+      res.status(400).send({
+        error: 'Something went wrong: ' + err
+      })
+    }
+  },
+
+  async addView (req, res) {
+    await Video.findById(req.params.videoId).then(video => {
+      return video.increment({
+        'views': 1
+      })
+    })
   },
 
   async watchInfo (req, res){
@@ -68,6 +90,12 @@ module.exports = {
           description: video.dataValues.description,
           authorUsername: video.dataValues.authorUsername
         })
+
+        /*await Video.findById(req.params.videoId).then(video => {
+          return video.increment({
+            'views': 1
+          })
+        })*/
       } else {
         res.status(400).send({
           error: 'This is the private video'

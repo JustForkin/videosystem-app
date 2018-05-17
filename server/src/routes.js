@@ -70,6 +70,10 @@ module.exports = (app) => {
     isAuthenticated,
     VideoController.addLike)
   app.post(
+    '/videos/:videoId/addDislike',
+    isAuthenticated,
+    VideoController.addDislike)
+  app.post(
     '/videos/:videoId/pointsByUser',
     isAuthenticated,
     VideoController.pointsByUser)
@@ -85,5 +89,4 @@ module.exports = (app) => {
     isAuthenticated,
     upload.single('videoFile'),
     VideoController.upload)
-
 }

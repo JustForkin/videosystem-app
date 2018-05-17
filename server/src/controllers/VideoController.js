@@ -103,6 +103,60 @@ module.exports = {
     }
   },
 
+  async addDislike (req, res) {
+    try {
+      const currDislikes = await DislikedVideo.findOne({
+        where: {
+          id: req.params.videoId,
+          username: req.user.username
+        }
+      })
+
+      if (currDislikes) {
+        // ALREADY SET: remove dislike
+        await DislikedVideo.destroy({
+          where: {
+            id: req.params.videoId,
+            username: req.user.username
+          }
+        })
+
+        res.send({like: 0, dislike: -1})
+      } else {
+        // NOT SET: add dislike
+        const currLikes = await LikedVideo.findOne({
+          where: {
+            id: req.params.videoId,
+            username: req.user.username
+          }
+        })
+
+        if (currLikes) {
+          await LikedVideo.destroy({
+            where: {
+              id: req.params.videoId,
+              username: req.user.username
+            }
+          })
+        }
+
+        await DislikedVideo.create({
+          username: req.user.username,
+          id: req.params.videoId
+        })
+
+        res.send({
+          like: (currLikes) ? -1 : 0,
+          dislike: 1
+        })
+      }
+    } catch (err) {
+      res.status(400).send({
+        error: err
+      })
+    }
+  },
+
   async pointsByUser (req, res) {
     try {
       const currLikes = await LikedVideo.findOne({

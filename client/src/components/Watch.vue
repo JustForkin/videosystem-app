@@ -106,8 +106,38 @@ export default {
         })
       }
     },
-    async dislike(){
 
+    async dislike() {
+      if (this.isUserLoggedIn && !this.isAdmin){
+        await axios.post(this.src + '/addDislike', null, {
+          headers: {
+            'Authorization': `Bearer ${this.token}`
+          }
+        })
+          .then((response) => {
+            console.log(response.data)
+            this.video.dislikes += response.data.dislike
+            this.alreadyDisliked = (response.data.dislike > 0)
+            this.video.likes += response.data.like
+            this.alreadyLiked = false
+          })
+          .catch((error) => {
+            this.$store.dispatch('setSnack', {
+              snack: error.response.data.error
+            })
+          })
+      } else {
+        if (this.isUserLoggedIn && this.isAdmin){
+          this.$store.dispatch('setSnack', {
+            snack: 'Admins are not able to like / dislike'
+          })
+          return
+        }
+
+        this.$store.dispatch('setSnack', {
+          snack: 'Login to be able to like / dislike'
+        })
+      }
     }
   },
   async mounted () {
@@ -134,44 +164,6 @@ export default {
         }
       })
     }
-    /*await axios.post(this.src)
-      .then((response) => {
-        console.log(response.data)
-        this.video = response.data
-      })
-      .catch((error) => {
-        console.log(error)
-        this.$store.dispatch('setSnack', {
-          snack: error.response.data.error
-        })
-      })
-
-    await axios.post(this.src + '/addView')
-      .then((response) => {
-        console.log(response.data)
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-
-    await axios.post(this.src + '/pointsByUser', null, {
-      headers: {
-        'Authorization': `Bearer ${this.token}`
-      }
-    })
-      .then((response) => {
-        console.log(response.data)
-        if (response.data.liked) {
-          this.alreadyLiked = true
-        }
-        if (response.data.disliked) {
-          this.alreadyDisliked = true
-        }
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-    */
   },
   computed: {
     ...mapState([

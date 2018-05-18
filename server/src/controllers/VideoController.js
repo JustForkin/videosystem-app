@@ -8,24 +8,32 @@ module.exports = {
     try {
       let videos = null
       const search = req.query.search
+      const sortBy = req.query.sortBy
+
+      var orderBy = [
+        ['id', 'DESC']
+      ]
+
+      if (sortBy) {
+        orderBy = [
+          ['views', 'DESC']
+        ]
+      }
+
       if (search) {
         videos = await Video.findAll({
           where: {
-            title: { [Op.like]: `%${search}%` },
+            title: { [Op.iLike]: `%${search}%` },
             isPublic: true
           },
-          order: [
-            ['id', 'DESC']
-          ]
+          order: orderBy
         })
       } else {
         videos = await Video.findAll({
           where: {
             isPublic: true
           },
-          order: [
-            ['id', 'DESC']
-          ]
+          order: orderBy
         })
       }
 

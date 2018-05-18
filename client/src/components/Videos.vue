@@ -65,14 +65,13 @@
           </v-layout>
         </v-card>
       </div><!-- .videos-list -->
-      <!-- <infinite-loading @infinite="infiniteHandler"></infinite-loading> -->
     </v-flex>
   </v-layout>
 </template>
 
 <script>
 import VideoService from '@/services/VideoService'
-import InfiniteLoading from 'vue-infinite-loading'
+import _ from 'lodash'
 
 export default {
   data () {
@@ -83,25 +82,28 @@ export default {
       searchQuery: ''
     }
   },
-  methods: {
-    infiniteHandler($state) {
-      setTimeout(() => {
-        const temp = []
-        for (let i = this.videos.length + 1; i <= this.videos.length + 20; i++) {
-          temp.push(i)
-        }
-        this.videos = this.videos.concat(temp)
-        $state.loaded()
-      }, 1000)
-    }
-  },
-  components: {
-    InfiniteLoading
-  },
   async mounted () {
-    this.videos = (await VideoService.videos()).data.sort(function (a, b) {
-      return b.id - a.id
-    })
+    this.searchVideos()
+  },
+  methods: {
+    searchVideos (query, sortByPopularity = false) {
+      var self = this
+      _.debounce(async function () {
+        try {
+          self.videos = (await VideoService.videos(query, sortByPopularity)).data
+          if (!self.videos) {
+            self.$store.dispatch('setSnack', {
+              snack: 'No videos found :('
+            })
+          }
+        } catch (error) {
+          self.$store.dispatch('setSnack', {
+            snack: error.response.data.error
+          })
+          self.videos = []
+        }
+      }, 800)()
+    }
   },
   watch : {
     sortTypeSwitch: function (value) {
@@ -110,9 +112,11 @@ export default {
       } else {
         this.sortType = 'Sort by: upload date'
       }
+
+      this.searchVideos(this.searchQuery, value)
     },
     searchQuery: function (value) {
-      
+      this.searchVideos(value, this.sortTypeSwitch)
     }
   }
 }

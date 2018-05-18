@@ -1,8 +1,16 @@
 import api from '@/services/api'
 
 export default {
-  videos () {
-    return api().get('videos')
+  videos (search, sortByPopularity) {
+    let urlRequest = `videos/?`
+    if (search) {
+      urlRequest += `search=${search}&`
+    }
+    if (sortByPopularity) {
+      urlRequest += `sortBy=popularity`
+    }
+
+    return api().get(urlRequest)
   },
   watch (videoId) {
     return api().get(`videos/${videoId}`)

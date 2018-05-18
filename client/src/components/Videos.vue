@@ -1,22 +1,24 @@
 <template>
   <v-layout row style="padding-top: 35px;">
     <v-flex xs12 offset-xs0 sm10 offset-sm1 md8 offset-md2 lg6 offset-lg3 xl4 offset-xl4>
-      <!-- <v-layout row>
+      <v-layout row>
         <v-flex xs6 offset-xs0>
-          <v-switch small
-            label="Sort by: upload date">
+          <v-switch
+            v-model="sortTypeSwitch"
+            small
+            :label="sortType">
           </v-switch>
         </v-flex>
         <v-flex xs6>
           <v-text-field
-             v-model="search"
+             v-model="searchQuery"
              append-icon="search"
              label="Search"
              single-line
              hide-details
            ></v-text-field>
         </v-flex>
-      </v-layout> -->
+      </v-layout>
       <div
         class="videos-list"
         v-for="video in videos"
@@ -75,7 +77,10 @@ import InfiniteLoading from 'vue-infinite-loading'
 export default {
   data () {
     return {
-      videos: []
+      videos: [],
+      sortTypeSwitch: false,
+      sortType: 'Sort by: upload date',
+      searchQuery: ''
     }
   },
   methods: {
@@ -97,6 +102,18 @@ export default {
     this.videos = (await VideoService.videos()).data.sort(function (a, b) {
       return b.id - a.id
     })
+  },
+  watch : {
+    sortTypeSwitch: function (value) {
+      if (value) {
+        this.sortType = 'Sort by: popularity'
+      } else {
+        this.sortType = 'Sort by: upload date'
+      }
+    },
+    searchQuery: function (value) {
+      
+    }
   }
 }
 </script>

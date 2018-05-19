@@ -1,10 +1,10 @@
-import Start from '@/components/Start'
 import SignUp from '@/components/SignUp'
 import Login from '@/components/Login'
 import Videos from '@/components/Videos'
 import Watch from '@/components/Watch'
 import WatchExample from '@/components/WatchExample'
 import Upload from '@/components/Upload'
+import Users from '@/components/Users'
 
 const routes = [
   {
@@ -36,6 +36,11 @@ const routes = [
     path: '/upload',
     name: 'Upload',
     component: Upload
+  },
+  {
+    path: '/users',
+    name: 'Users',
+    component: Users
   },
   {
     path: '*',

@@ -3,6 +3,8 @@ const AuthenticationControllerPolicy = require ('./policies/AuthenticationContro
 
 const CountryController = require ('./controllers/CountryController')
 
+const UserController = require ('./controllers/UserController')
+
 const VideoController = require ('./controllers/VideoController')
 const multer = require('multer')
 const {Video} = require('./models')
@@ -89,4 +91,9 @@ module.exports = (app) => {
     isAuthenticated,
     upload.single('videoFile'),
     VideoController.upload)
+
+  // users
+  app.get(
+    '/users',
+    UserController.users)
 }

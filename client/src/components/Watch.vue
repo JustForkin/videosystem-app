@@ -76,7 +76,7 @@ export default {
   methods: {
     async like () {
       if (this.isUserLoggedIn && !this.isAdmin){
-        await axios.post(this.src + '/addLike', null, {
+        await axios.post(this.src + '/addLike', {}, {
           headers: {
             'Authorization': `Bearer ${this.token}`
           }
@@ -109,7 +109,7 @@ export default {
 
     async dislike() {
       if (this.isUserLoggedIn && !this.isAdmin){
-        await axios.post(this.src + '/addDislike', null, {
+        await axios.post(this.src + '/addDislike', {}, {
           headers: {
             'Authorization': `Bearer ${this.token}`
           }
@@ -153,7 +153,7 @@ export default {
     })
 
     if ((self.isUserLoggedIn && !self.isAdmin)) {
-      await axios.post(self.src + '/pointsByUser', null, {headers: {'Authorization': `Bearer ${self.token}`}})
+      await axios.post(self.src + '/pointsByUser', {}, {headers: {'Authorization': `Bearer ${self.token}`}})
       .then((response) => {
         console.log(response.data)
         if (response.data.liked) {

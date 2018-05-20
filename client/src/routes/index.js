@@ -5,6 +5,7 @@ import Watch from '@/components/Watch'
 import WatchExample from '@/components/WatchExample'
 import Upload from '@/components/Upload'
 import Users from '@/components/Users'
+import Profile from '@/components/Profile'
 
 const routes = [
   {
@@ -41,6 +42,11 @@ const routes = [
     path: '/users',
     name: 'Users',
     component: Users
+  },
+  {
+    path: '/users/:username',
+    name: 'Profile',
+    component: Profile
   },
   {
     path: '*',

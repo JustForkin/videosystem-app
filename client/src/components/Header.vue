@@ -9,7 +9,15 @@
       to="/">
       <v-icon>ondemand_video</v-icon>
     </v-btn>
-    <v-toolbar-title class="hidden-sm-and-down">Videosystem App</v-toolbar-title>
+    <v-toolbar-title class="hidden-sm-and-down mr-2">Videosystem App</v-toolbar-title>
+    <v-toolbar-items class="">
+    <!-- Users button -->
+    <v-btn
+      :to="{name: 'Users'}"
+      flat>
+      <v-icon>supervised_user_circle</v-icon>
+      Users</v-btn>
+    </v-toolbar-items>
     <v-spacer></v-spacer>
     <v-toolbar-items class="">
       <!-- Login button -->

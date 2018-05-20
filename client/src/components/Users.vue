@@ -20,90 +20,77 @@
         </v-flex>
       </v-layout>
       <div
-        class="videos-list"
-        v-for="video in videos"
-        :key="video.id"
+        class="users-list"
+        v-for="user in users"
+        :key="user.username"
         >
         <v-card class="mb-1">
           <v-layout row>
             <v-flex xs9>
-              <v-card-title primary-title>
-                <h3 class="headline">{{video.title}}</h3>
+              <v-card-title
+                primary-title>
+                <h3 class="headline">{{user.username}}</h3>
               </v-card-title>
-            </v-flex>
-            <v-flex xs3 offset-xs0>
-              <v-chip
-                :to="{name: 'Users', params: { username: video.authorUsername }}"
-                small color="">
-                <v-icon small>perm_identity</v-icon>{{video.authorUsername}}
-              </v-chip>
-              <p>{{video.uploadDate}}</p>
-            </v-flex>
-          </v-layout>
-          <v-layout row>
-            <v-flex xs6>
               <v-card-actions>
                 <v-btn
                   flat
                   color="accent"
-                  :to="{name: 'Watch', params: { videoId: video.id }}">
-                  Watch
+                  :to="{name: 'Profile', params: { username: user.username }}"
+                  >
+                  Visit profile
                 </v-btn>
               </v-card-actions>
             </v-flex>
-            <v-flex xs6 offset-xs0>
-              <v-layout column d-inline-flex>
-                <v-icon small flat color="success">thumb_up</v-icon>
-                {{video.likes}}
-              </v-layout>
-              <v-layout column d-inline-flex>
-                <v-icon small flat color="error">thumb_down</v-icon>
-                {{video.dislikes}}
-              </v-layout>
-              <v-layout column d-inline-flex>
-                <v-icon small flat color="blue">play_arrow</v-icon>
-                {{video.views}}
-              </v-layout>
+            <v-flex xs3 offset-xs0>
+              <br>
+              <h4>{{user.firstname}} {{user.lastname}}</h4>
+              <p>Registered: {{user.registerDate}}</p>
             </v-flex>
           </v-layout>
+          <!-- <v-layout row>
+            <v-flex xs6>
+
+            </v-flex>
+          </v-layout> -->
         </v-card>
-      </div><!-- .videos-list -->
+      </div><!-- .users-list -->
     </v-flex>
   </v-layout>
 </template>
 
 <script>
-import VideoService from '@/services/VideoService'
+import UserService from '@/services/UserService'
 import _ from 'lodash'
 
 export default {
   data () {
     return {
       videos: [],
+      users: [],
       sortTypeSwitch: false,
-      sortType: 'Sort by: upload date',
+      sortType: 'Sort by: register date',
       searchQuery: ''
     }
   },
   async mounted () {
-    this.searchVideos()
+    this.searchUsers()
   },
   methods: {
-    searchVideos (query, sortByPopularity = false) {
+    searchUsers (query, sortByPopularity = false) {
       var self = this
       _.debounce(async function () {
         try {
-          self.videos = (await VideoService.videos(query, sortByPopularity)).data
-          if (!self.videos) {
+          self.users = (await UserService.users(query, sortByPopularity)).data
+          if (!self.users) {
             self.$store.dispatch('setSnack', {
-              snack: 'No videos found :('
+              snack: 'No users found :('
             })
           }
         } catch (error) {
           self.$store.dispatch('setSnack', {
             snack: error.response.data.error
           })
-          self.videos = []
+          self.users = []
         }
       }, 800)()
     }
@@ -113,13 +100,13 @@ export default {
       if (value) {
         this.sortType = 'Sort by: popularity'
       } else {
-        this.sortType = 'Sort by: upload date'
+        this.sortType = 'Sort by: register date'
       }
 
-      this.searchVideos(this.searchQuery, value)
+      this.searchUsers(this.searchQuery, value)
     },
     searchQuery: function (value) {
-      this.searchVideos(value, this.sortTypeSwitch)
+      this.searchUsers(value, this.sortTypeSwitch)
     }
   }
 }

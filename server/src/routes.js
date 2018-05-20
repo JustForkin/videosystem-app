@@ -91,10 +91,6 @@ module.exports = (app) => {
     isAuthenticated,
     upload.single('videoFile'),
     VideoController.upload)
-  app.post(
-    '/videos/publicVideosOfUser/:username',
-    VideoController.publicVideosOfUser)
-
 
   // users
   app.get(
@@ -103,7 +99,8 @@ module.exports = (app) => {
   app.get(
     '/users/:username',
     UserController.profile)
-  app.post(
-    '/users/:username',
-    UserController.profile)
+  app.get(
+    '/me',
+    isAuthenticated,
+    UserController.myProfile)
 }

@@ -85,14 +85,44 @@ module.exports = {
         attributes: attributesToShow
       })
 
-      // after DB query
       if (!user) {
         res.status(400).send({
           error: 'The user does not exist'
         })
       } else {
-        res.send(user)
+        // user exists
+        let videos = []
+        videos = await Video.findAll({
+          where: {
+            isPublic: true,
+            authorUsername: req.params.username
+          },
+          order: [['id', 'DESC']]
+        })
+
+        res.send({
+          user: user,
+          videos: videos
+        })
       }
+    } catch (err) {
+      res.status(400).send({
+        error: 'Something went wrong: ' + err
+      })
+    }
+  },
+
+  async myProfile (req, res) {
+    try {
+      var user = await User.findOne({
+        where: {
+          username: req.user.username
+        },
+        attributes: attributesToShow
+      })
+
+      // after DB query
+      res.send(user)
     } catch (err) {
       res.status(400).send({
         error: 'Something went wrong: ' + err

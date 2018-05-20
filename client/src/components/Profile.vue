@@ -65,16 +65,12 @@
 </template>
 
 <script>
-import VideoService from '@/services/VideoService'
 import UserService from '@/services/UserService'
-import axios from 'axios'
 import {mapState} from 'vuex'
 
 export default {
   data () {
     return {
-      homeURL: 'http://localhost:8081',
-      src: 'http://localhost:8081/users/',
       user: null,
       videos: []
     }
@@ -89,25 +85,15 @@ export default {
     }
   },
   async mounted () {
-    this.src += this.$route.params.username
-    var self = this
-
-    await axios.post(self.src).then((response) => {
-      self.user = response.data
-    })
-
     try {
-      await axios.post(self.homeURL + '/videos/publicVideosOfUser/' + self.user.username).then((response) => {
-        self.videos = response.data
-        if (!self.videos.length) {
-          console.log('no videos')
-        }
+      await UserService.profile(this.$route.params.username).then((response) => {
+        this.user = response.data.user
+        this.videos = response.data.videos
       })
     } catch (error) {
-      self.$store.dispatch('setSnack', {
+      this.$store.dispatch('setSnack', {
         snack: error.response.data.error
       })
-      self.videos = []
     }
   },
   computed: {

@@ -361,25 +361,5 @@ module.exports = {
         })
       }
     }
-  },
-
-  async publicVideosOfUser (req, res) {
-    try {
-      let videos = []
-
-      videos = await Video.findAll({
-        where: {
-          isPublic: true,
-          authorUsername: req.params.username
-        },
-        order: [['id', 'DESC']]
-      })
-
-      res.send(videos)      
-    } catch (err) {
-      res.status(400).send({
-        error: 'Something went wrong: ' + err
-      })
-    }
   }
 }

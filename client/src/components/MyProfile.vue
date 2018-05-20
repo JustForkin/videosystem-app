@@ -73,8 +73,6 @@ import {mapState} from 'vuex'
 export default {
   data () {
     return {
-      homeURL: 'http://localhost:8081',
-      src: 'http://localhost:8081/users/',
       user: null,
       videos: []
     }
@@ -89,25 +87,15 @@ export default {
     }
   },
   async mounted () {
-    this.src += this.$route.params.username
-    var self = this
-
-    await axios.post(self.src).then((response) => {
-      self.user = response.data
-    })
-
-    try {
-      await axios.post(self.homeURL + '/videos/publicVideosOfUser/' + self.user.username).then((response) => {
-        self.videos = response.data
-        if (!self.videos.length) {
-          console.log('no videos')
-        }
-      })
-    } catch (error) {
-      self.$store.dispatch('setSnack', {
-        snack: error.response.data.error
-      })
-      self.videos = []
+    if (this.isUserLoggedIn) {
+      try {
+        const response = await UserService.myProfile()
+        this.user = response.data
+      } catch (error) {
+        this.$store.dispatch('setSnack', {
+          snack: error.response.data.error
+        })
+      }
     }
   },
   computed: {

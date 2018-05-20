@@ -8,15 +8,17 @@ var sequelize = new Sequelize(
   config.db.password,
   config.db.options)
 
+const attributesToShow = [
+  "username", "firstname", "lastname",
+  "birthday", "gender", "about",
+  "registerDate", "isAdmin"]
+
 module.exports = {
   async users (req, res) {
     try {
       let users = []
       const search = req.query.search
       const sortBy = req.query.sortBy
-
-      const attributesToShow = ["username", "firstname", "lastname",
-        "birthday", "gender", "about", "registerDate", "isAdmin"]
 
       const orderBy = [['registerDate', 'DESC']]
 
@@ -65,6 +67,31 @@ module.exports = {
         }
       } else {
         res.send(users)
+      }
+    } catch (err) {
+      res.status(400).send({
+        error: 'Something went wrong: ' + err
+      })
+    }
+  },
+
+  async profile(req, res) {
+    try {
+      let user = null
+      user = await User.findOne({
+        where: {
+          username: req.params.username
+        },
+        attributes: attributesToShow
+      })
+
+      // after DB query
+      if (!user) {
+        res.status(400).send({
+          error: 'The user does not exist'
+        })
+      } else {
+        res.send(user)
       }
     } catch (err) {
       res.status(400).send({

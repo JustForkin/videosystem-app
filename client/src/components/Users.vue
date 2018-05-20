@@ -26,10 +26,11 @@
         >
         <v-card class="mb-1">
           <v-layout row>
-            <v-flex xs9>
+            <v-flex xs6>
               <v-card-title
                 primary-title>
-                <h3 class="headline">{{user.username}}</h3>
+                <v-chip v-if="!user.isAdmin" large><h2><v-icon>perm_identity</v-icon>{{user.username}}</h2></v-chip>
+                <v-chip v-if="user.isAdmin" large color="error"><h2><v-icon>perm_identity</v-icon>{{user.username}}</h2></v-chip>
               </v-card-title>
               <v-card-actions>
                 <v-btn
@@ -41,7 +42,7 @@
                 </v-btn>
               </v-card-actions>
             </v-flex>
-            <v-flex xs3 offset-xs0>
+            <v-flex xs6 offset-xs0>
               <br>
               <h4>{{user.firstname}} {{user.lastname}}</h4>
               <p>Registered: {{user.registerDate}}</p>

@@ -1,6 +1,5 @@
 <template>
   <v-toolbar>
-    <!-- <v-toolbar-side-icon></v-toolbar-side-icon> -->
     <v-btn
       large
       flat
@@ -39,7 +38,7 @@
           <v-icon left>build</v-icon>{{user.username}}
         </v-chip>
       </div>
-
+      
       <!-- User account Label -->
       <div
         v-if="!isAdmin && isUserLoggedIn"

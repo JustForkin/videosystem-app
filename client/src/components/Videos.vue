@@ -32,11 +32,11 @@
               </v-card-title>
             </v-flex>
             <v-flex xs3 offset-xs0>
-              <v-chip
-                :to="{name: 'Users', params: { username: video.authorUsername }}"
-                small color="">
+              <v-btn
+                :to="{name: 'Profile', params: { username: video.authorUsername }}"
+                small flat color="">
                 <v-icon small>perm_identity</v-icon>{{video.authorUsername}}
-              </v-chip>
+              </v-btn>
               <p>{{video.uploadDate}}</p>
             </v-flex>
           </v-layout>

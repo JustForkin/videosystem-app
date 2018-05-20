@@ -96,4 +96,10 @@ module.exports = (app) => {
   app.get(
     '/users',
     UserController.users)
+  app.get(
+    '/users/:username',
+    UserController.profile)
+  app.post(
+    '/users/:username',
+    UserController.profile)
 }

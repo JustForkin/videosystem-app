@@ -20,7 +20,7 @@ module.exports = {
       const search = req.query.search
       const sortBy = req.query.sortBy
 
-      const orderBy = [['registerDate', 'DESC']]
+      const orderBy = [['registerDate']]
 
       if (!sortBy) {
         if (search) {

@@ -14,5 +14,8 @@ export default {
   },
   profile (username) {
     return api().get(`users/${username}`)
+  },
+  myProfile () {
+    return api().get('me/')
   }
 }

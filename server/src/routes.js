@@ -91,6 +91,10 @@ module.exports = (app) => {
     isAuthenticated,
     upload.single('videoFile'),
     VideoController.upload)
+  app.post(
+    '/videos/publicVideosOfUser/:username',
+    VideoController.publicVideosOfUser)
+
 
   // users
   app.get(

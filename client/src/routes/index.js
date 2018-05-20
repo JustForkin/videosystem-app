@@ -6,6 +6,7 @@ import WatchExample from '@/components/WatchExample'
 import Upload from '@/components/Upload'
 import Users from '@/components/Users'
 import Profile from '@/components/Profile'
+import MyProfile from '@/components/MyProfile'
 
 const routes = [
   {
@@ -47,6 +48,11 @@ const routes = [
     path: '/users/:username',
     name: 'Profile',
     component: Profile
+  },
+  {
+    path: '/me',
+    name: 'MyProfile',
+    component: MyProfile
   },
   {
     path: '*',

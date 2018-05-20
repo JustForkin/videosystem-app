@@ -38,22 +38,32 @@
           <v-icon left>build</v-icon>{{user.username}}
         </v-chip>
       </div>
-      
+
+      <!-- My Profile button -->
+      <v-btn
+        v-if="isUserLoggedIn"
+        :to="{name: 'MyProfile'}"
+        flat>
+        <v-icon class="mr-1">settings</v-icon>
+        Me</v-btn>
+
       <!-- User account Label -->
       <div
         v-if="!isAdmin && isUserLoggedIn"
         style="margin: auto;"
         class="text-xs-center">
-        <v-chip small outline color="accent">
+        <v-chip
+          small outline color="accent">
           <v-icon left>perm_identity</v-icon>{{user.username}}
         </v-chip>
       </div>
-
+      
       <!-- Upload button -->
       <v-btn
         v-if="isUserLoggedIn && !isAdmin"
         :to="{name: 'Upload'}"
         flat>
+        <!-- <v-icon class="mr-1">backup</v-icon> -->
         Upload</v-btn>
       <!-- Log Out Button -->
       <v-btn

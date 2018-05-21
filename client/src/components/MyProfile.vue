@@ -52,6 +52,12 @@
                   :to="{name: 'WatchPrivate', params: { videoId: video.id }}">
                   Watch
                 </v-btn>
+                <v-btn
+                  flat
+                  color="accent"
+                  :to="{name: 'EditVideo', params: { videoId: video.id }}">
+                  Edit video
+                </v-btn>
               </v-card-actions>
             </v-flex>
             <v-flex xs6 offset-xs0>

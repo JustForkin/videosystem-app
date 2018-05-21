@@ -241,6 +241,36 @@ module.exports = {
     }
   },
 
+  async watchPrivateInfo (req, res){
+    try {
+      const video = await Video.findById(req.params.videoId)
+      if(!video){
+        res.status(400).send({
+          error: 'The video with the ID does not exist'
+        })
+      }
+
+      if (req.user.username != video.authorUsername) {
+        res.status(403).send({
+          error: 'You have no access to the video'
+        })
+      }
+
+      res.send({
+        likes: video.dataValues.likes,
+        dislikes: video.dataValues.dislikes,
+        views: video.dataValues.views,
+        title: video.dataValues.title,
+        description: video.dataValues.description,
+        authorUsername: video.dataValues.authorUsername
+      })
+    } catch (err) {
+      res.status(400).send({
+        error: 'Something went wrong: ' + err
+      })
+    }
+  },
+
   async watch (req, res){
     try {
       const video = await Video.findById(req.params.videoId)
@@ -283,7 +313,6 @@ module.exports = {
           res.writeHead(200, head)
           fs.createReadStream(path).pipe(res)
         }
-
       } else {
         res.status(400).send({
           error: 'This is the private video'
@@ -298,18 +327,49 @@ module.exports = {
 
   async watchPrivate (req, res){
     try {
+      console.log('on >>> watchPrivate')
       const video = await Video.findOne({
         where: {
-          authorUsername: req.user.username,
           id: req.params.videoId
         }
       })
 
       if (video) {
-        res.send(video)
+        // -- START STREAM VIDEO HERE
+        // res.send(video)
+        console.log('on GET videos/private/videoId')
+        const path = __dirname.replace('controllers', 'video-uploads/') + video.dataValues.videoFile
+        const stat = fs.statSync(path)
+        const fileSize = stat.size
+        const range = req.headers.range
+
+        if (range) {
+          const parts = range.replace(/bytes=/, "").split("-")
+          const start = parseInt(parts[0], 10)
+          const end = parts[1]
+            ? parseInt(parts[1], 10)
+            : fileSize-1
+          const chunksize = (end-start)+1
+          const file = fs.createReadStream(path, {start, end})
+          const head = {
+            'Content-Range': `bytes ${start}-${end}/${fileSize}`,
+            'Accept-Ranges': 'bytes',
+            'Content-Length': chunksize,
+            'Content-Type': 'video/mp4',
+          }
+          res.writeHead(206, head);
+          file.pipe(res);
+        } else {
+          const head = {
+            'Content-Length': fileSize,
+            'Content-Type': 'video/mp4'
+          }
+          res.writeHead(200, head)
+          fs.createReadStream(path).pipe(res)
+        }
       } else {
-        res.status(403).send({
-          error: 'You have no access to the video'
+        res.status(400).send({
+          error: 'There is no video with the ID'
         })
       }
     } catch (err) {

@@ -1,4 +1,5 @@
 import api from '@/services/api'
+import store from '@/store/store'
 
 export default {
   videos (search, sortByPopularity) {
@@ -15,8 +16,14 @@ export default {
   watch (videoId) {
     return api().get(`videos/${videoId}`)
   },
-  watchexample () {
-    return api().get(`watchexample`)
+  watchInfo (videoId) {
+    return api().post(`videos/${videoId}`)
+  },
+  watchPrivate (videoId) {
+    return api().get(`videos/private/${videoId}`)
+  },
+  watchPrivateInfo (videoId) {
+    return api().post(`videos/private/${videoId}`)
   },
   upload (formData) {
     return api().post(`upload`, formData)

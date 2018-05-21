@@ -121,8 +121,18 @@ module.exports = {
         attributes: attributesToShow
       })
 
-      // after DB query
-      res.send(user)
+      let videos = []
+      videos = await Video.findAll({
+        where: {
+          authorUsername: req.user.username
+        },
+        order: [['id', 'DESC']]
+      })
+
+      res.send({
+        user: user,
+        videos: videos
+      })
     } catch (err) {
       res.status(400).send({
         error: 'Something went wrong: ' + err

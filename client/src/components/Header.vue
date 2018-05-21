@@ -39,14 +39,6 @@
         </v-chip>
       </div>
 
-      <!-- My Profile button -->
-      <v-btn
-        v-if="isUserLoggedIn"
-        :to="{name: 'MyProfile'}"
-        flat>
-        <v-icon class="mr-1">settings</v-icon>
-        Me</v-btn>
-
       <!-- User account Label -->
       <div
         v-if="!isAdmin && isUserLoggedIn"
@@ -57,7 +49,15 @@
           <v-icon left>perm_identity</v-icon>{{user.username}}
         </v-chip>
       </div>
-      
+
+      <!-- My Profile button -->
+      <v-btn
+        v-if="isUserLoggedIn"
+        :to="{name: 'MyProfile'}"
+        flat>
+        <v-icon class="mr-1">settings</v-icon>
+        Me</v-btn>
+
       <!-- Upload button -->
       <v-btn
         v-if="isUserLoggedIn && !isAdmin"

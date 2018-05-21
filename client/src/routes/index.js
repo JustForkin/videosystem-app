@@ -2,7 +2,7 @@ import SignUp from '@/components/SignUp'
 import Login from '@/components/Login'
 import Videos from '@/components/Videos'
 import Watch from '@/components/Watch'
-import WatchExample from '@/components/WatchExample'
+import WatchPrivate from '@/components/WatchPrivate'
 import Upload from '@/components/Upload'
 import Users from '@/components/Users'
 import Profile from '@/components/Profile'
@@ -30,9 +30,9 @@ const routes = [
     component: Watch
   },
   {
-    path: '/watchexample',
-    name: 'WatchExample',
-    component: WatchExample
+    path: '/videos/private/:videoId',
+    name: 'WatchPrivate',
+    component: WatchPrivate
   },
   {
     path: '/upload',

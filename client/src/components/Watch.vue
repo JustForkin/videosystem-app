@@ -144,9 +144,9 @@ export default {
     this.src += this.$route.params.videoId
     var self = this
 
+    // video stream
     await axios.post(self.src).then((response) => {
       self.video = response.data
-
       axios.post(self.src + '/addView')
         .then((response) => {
         })

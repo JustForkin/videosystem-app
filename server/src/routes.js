@@ -84,8 +84,11 @@ module.exports = (app) => {
     VideoController.addView)
   app.get(
     '/videos/private/:videoId',
-    isAuthenticated,
     VideoController.watchPrivate)
+  app.post(
+    '/videos/private/:videoId',
+    isAuthenticated,
+    VideoController.watchPrivateInfo)
   app.post(
     '/upload',
     isAuthenticated,

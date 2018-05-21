@@ -26,9 +26,12 @@
             <v-flex xs9>
               <v-card-title primary-title>
                 <h3 class="headline">{{video.title}}</h3>
+                <v-chip v-if="!video.isPublic" color="error">
+                  Private
+                </v-chip>
               </v-card-title>
             </v-flex>
-            <v-flex xs3 offset-xs0>
+            <v-flex xs3 offset-xs0 class="mt-2">
               <p>{{video.uploadDate}}</p>
             </v-flex>
           </v-layout>
@@ -90,7 +93,8 @@ export default {
     if (this.isUserLoggedIn) {
       try {
         const response = await UserService.myProfile()
-        this.user = response.data
+        this.user = response.data.user
+        this.videos = response.data.videos
       } catch (error) {
         this.$store.dispatch('setSnack', {
           snack: error.response.data.error

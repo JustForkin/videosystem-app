@@ -144,7 +144,28 @@ export default {
     },
 
     async remove () {
+      try {
+        const response = await UserService.removeMyProfile({
+          username: this.user.username
+        })
+        if (response.data.success) {
+          this.$store.dispatch('setSnack', {
+            snack: response.data.success,
+            snackColor: 'success'
+          })
 
+          this.$store.dispatch('setToken', null)
+          this.$store.dispatch('setUser', null)
+
+          this.$router.push({
+            name: 'Videos'
+          })
+        }
+      } catch (error) {
+        this.$store.dispatch('setSnack', {
+          snack: error.response.data.error
+        })
+      }
     }
   },
   watch: {

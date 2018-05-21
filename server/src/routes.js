@@ -126,4 +126,8 @@ module.exports = (app) => {
     '/me/edit',
     isAuthenticated,
     UserController.updateMyProfile)
+  app.post(
+    '/me/remove',
+    isAuthenticated,
+    UserController.removeMyProfile)
 }

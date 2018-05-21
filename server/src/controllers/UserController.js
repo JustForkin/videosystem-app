@@ -2,6 +2,7 @@ const {User, Video} = require('../models')
 const Sequelize = require('sequelize')
 const Op = Sequelize.Op
 const config = require('../config/config')
+const fs = require('fs')
 var sequelize = new Sequelize(
   config.db.database,
   config.db.user,
@@ -162,6 +163,53 @@ module.exports = {
 
       res.status(200).send({
         success: 'User profile has been successfully updated'
+      })
+    } catch (err) {
+      res.status(400).send({
+        error: 'Something went wrong: ' + err
+      })
+    }
+  },
+
+  async removeMyProfile (req, res) {
+    try {
+      if (req.user.username != req.body.username) {
+        res.status(403).send({
+          error: 'You do not have access to remove the profile'
+        })
+      }
+
+      // remove all videos
+      const videos = await Video.findAll({
+        where: {
+          authorUsername: req.body.username
+        }
+      })
+
+      if (videos.length) {
+        for (var i = 0; i < videos.length; i++) {
+          var path = __dirname.replace('controllers', 'video-uploads/') + videos[i].dataValues.videoFile
+          fs.unlink(path, (err) => {
+            if (err) throw err
+            console.log(path + ' file was deleted');
+          })
+        }
+      }
+
+      // delete DB data
+      await Video.destroy({
+        where: {
+          authorUsername: req.body.username
+        }
+      })
+      await User.destroy({
+        where: {
+          username: req.body.username
+        }
+      })
+
+      res.status(200).send({
+        success: 'User profile has been successfully removed'
       })
     } catch (err) {
       res.status(400).send({

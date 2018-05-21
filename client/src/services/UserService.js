@@ -23,5 +23,8 @@ export default {
   },
   updateMyProfile (body) {
     return api().post('me/edit/', body)
+  },
+  removeMyProfile (body) {
+    return api().post('me/remove', body)
   }
 }

@@ -7,20 +7,5 @@
     "authorUsername": "user1",
     "countryId": "1",
     "views": "2"
-  },
-  {
-    "title": "Slow Athmosphere",
-    "videoFile": "1526503450169_97YE8fJ0GazRxhdMveo5ENb81ZggvqiF_17 Slow Atmosphere.mp4",
-    "isPublic": true,
-    "authorUsername": "user2",
-    "countryId": "1"
-  },
-  {
-    "title": "VHS Glitch - Free",
-    "videoFile": "1526508725986_HlEBmPUMdGbfeHwYmKx43nrHvFbPvPxf_VHS Glitch - Free.mp4",
-    "isPublic": true,
-    "description": "Give a credit if you use it.",
-    "authorUsername": "user2",
-    "countryId": "1"
   }
 ]

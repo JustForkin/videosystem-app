@@ -12,6 +12,7 @@
         <v-flex xs8>
           <h1>{{video.title}}
             <v-btn
+            :to="{name: 'EditVideo', params: { videoId: video.id }}"
             flat
             small color="error">
             Edit video

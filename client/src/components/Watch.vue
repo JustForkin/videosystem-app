@@ -13,6 +13,7 @@
           <h1>{{video.title}}
             <v-btn
             v-if="user.username == video.authorUsername"
+            :to="{name: 'EditVideo', params: { videoId: video.id }}"
             flat
             small color="error">
             Edit video

@@ -221,7 +221,8 @@ module.exports = {
           views: video.dataValues.views,
           title: video.dataValues.title,
           description: video.dataValues.description,
-          authorUsername: video.dataValues.authorUsername
+          authorUsername: video.dataValues.authorUsername,
+          id: video.dataValues.id
         })
 
         /*await Video.findById(req.params.videoId).then(video => {
@@ -262,7 +263,8 @@ module.exports = {
         views: video.dataValues.views,
         title: video.dataValues.title,
         description: video.dataValues.description,
-        authorUsername: video.dataValues.authorUsername
+        authorUsername: video.dataValues.authorUsername,
+        id: video.dataValues.id
       })
     } catch (err) {
       res.status(400).send({

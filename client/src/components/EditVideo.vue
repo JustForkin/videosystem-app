@@ -1,13 +1,6 @@
 <template>
   <v-layout row style="margin-top: 0px;">
     <v-flex xs12 offset-xs0 sm10 offset-sm1 md8 offset-md2 lg6 offset-lg3 xl4 offset-xl4>
-      <video id="videoPlayer" width="100%" height="400px" autoplay controls>
-        <!-- <source src="http://localhost:3000/video" type="video/mp4"> -->
-        <source v-bind:src="src" type="video/mp4">
-        <source v-bind:src="src" type="video/webm">
-        <source v-bind:src="src" type="video/ogg">
-        Your browser does not support the video tag.
-      </video>
       <v-layout row class="mt-3">
         <v-flex xs8>
           <h1>{{video.title}}

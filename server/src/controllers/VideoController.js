@@ -419,8 +419,8 @@ module.exports = {
   async editSubmit (req, res) {
     try {
       if (req.user.username != req.body.authorUsername) {
-        res.status(400).send({
-          error: 'Something went wrong: ' + err
+        res.status(403).send({
+          error: 'You do not have access to edit the video'
         })
         return
       }

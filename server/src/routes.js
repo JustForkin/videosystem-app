@@ -118,4 +118,12 @@ module.exports = (app) => {
     '/me',
     isAuthenticated,
     UserController.myProfile)
+  app.get(
+    '/me/edit',
+    isAuthenticated,
+    UserController.myProfile)
+  app.post(
+    '/me/edit',
+    isAuthenticated,
+    UserController.updateMyProfile)
 }

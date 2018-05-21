@@ -17,5 +17,11 @@ export default {
   },
   myProfile () {
     return api().get('me/')
+  },
+  editMyProfile () {
+    return api().get('me/edit/')
+  },
+  updateMyProfile (body) {
+    return api().post('me/edit/', body)
   }
 }

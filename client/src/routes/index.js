@@ -8,6 +8,7 @@ import Users from '@/components/Users'
 import Profile from '@/components/Profile'
 import MyProfile from '@/components/MyProfile'
 import EditVideo from '@/components/EditVideo'
+import EditMyProfile from '@/components/EditMyProfile'
 
 const routes = [
   {
@@ -59,6 +60,11 @@ const routes = [
     path: '/me',
     name: 'MyProfile',
     component: MyProfile
+  },
+  {
+    path: '/me/edit',
+    name: 'EditMyProfile',
+    component: EditMyProfile
   },
   {
     path: '*',

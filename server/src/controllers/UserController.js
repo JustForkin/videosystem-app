@@ -138,5 +138,35 @@ module.exports = {
         error: 'Something went wrong: ' + err
       })
     }
+  },
+
+  async updateMyProfile (req, res) {
+    try {
+      if (req.user.username != req.body.username) {
+        res.status(403).send({
+          error: 'You do not have access to edit the profile'
+        })
+      }
+
+      User.update({
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
+        birthday: req.body.birthday,
+        gender: req.body.gender,
+        about: req.body.about
+      }, {
+        where: {
+          username: req.body.username
+        }
+      })
+
+      res.status(200).send({
+        success: 'User profile has been successfully updated'
+      })
+    } catch (err) {
+      res.status(400).send({
+        error: 'Something went wrong: ' + err
+      })
+    }
   }
 }

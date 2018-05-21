@@ -26,7 +26,10 @@ export default {
     return api().post(`videos/private/${videoId}`)
   },
   editVideo (videoId) {
-    return api().post(`videos/edit/${videoId}`)
+    return api().get(`videos/edit/${videoId}`)
+  },
+  editVideoSubmit (videoId, reqBodyData) {
+    return api().post(`videos/edit/${videoId}`, reqBodyData)
   },
   upload (formData) {
     return api().post(`upload`, formData)

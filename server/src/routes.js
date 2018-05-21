@@ -89,6 +89,14 @@ module.exports = (app) => {
     '/videos/private/:videoId',
     isAuthenticated,
     VideoController.watchPrivateInfo)
+  app.get(
+    '/videos/edit/:videoId',
+    isAuthenticated,
+    VideoController.edit)
+  app.post(
+    '/videos/edit/:videoId',
+    isAuthenticated,
+    VideoController.editSubmit)
   app.post(
     '/upload',
     isAuthenticated,

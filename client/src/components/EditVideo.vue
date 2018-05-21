@@ -1,170 +1,144 @@
 <template>
   <v-layout row style="margin-top: 0px;">
     <v-flex xs12 offset-xs0 sm10 offset-sm1 md8 offset-md2 lg6 offset-lg3 xl4 offset-xl4>
-      <v-layout row class="mt-3">
-        <v-flex xs8>
-          <h1>{{video.title}}
-            <v-btn
-            v-if="user.username == video.authorUsername"
-            flat
-            small color="error">
-            Edit video
-            </v-btn>
-          </h1>
-          <p>by
-            <v-btn
-              :to="{name: 'Profile', params: { username: video.authorUsername }}"
-              flat
-              small color="">
-              <v-icon small>perm_identity</v-icon>{{video.authorUsername}}
-            </v-btn>
-          </p>
-          <p>{{video.description}}</p>
-        </v-flex>
-        <v-flex xs4 offset-xs0>
-          <v-layout column d-inline-flex>
-            <v-btn
-              flat
-              icon
-              :outline="alreadyLiked"
-              fab
-              color="success"
-              @click="like">
-              <v-icon flat color="success">thumb_up</v-icon>
-            </v-btn>
-            {{video.likes}}
-          </v-layout>
-          <v-layout column d-inline-flex>
-            <v-btn
-              flat
-              icon
-              fab
-              :outline="alreadyDisliked"
-              color="error"
-              @click="dislike">
-              <v-icon flat color="error">thumb_down</v-icon>
-            </v-btn>
-            {{video.dislikes}}
-          </v-layout>
-          <v-layout column d-inline-flex>
-            <v-btn
-              flat
-              icon
-              fab
-              color="blue">
-              <v-icon flat color="blue">play_arrow</v-icon>
-            </v-btn>
-            {{video.views}}
-          </v-layout>
+      <!-- Title -->
+      <v-text-field
+          label="Title"
+          v-model="video.title"
+          :rules="titleRules"
+          :counter="30"
+          required>
+      </v-text-field>
+      <!-- Description  -->
+      <v-text-field
+          name="description"
+          label="Description"
+          v-model="video.description"
+          multi-line>
+      </v-text-field>
+      <!-- Country -->
+      <v-layout row wrap>
+        <v-flex xs12>
+          <v-select
+            :items="countries"
+            :filter="customFilter"
+            v-model="country"
+            item-text="country"
+            label="Country"
+            autocomplete
+            required
+          ></v-select>
         </v-flex>
       </v-layout>
+      <!-- isPublic -->
+      <v-switch
+        :label="`Public access to video: ${video.isPublic}`"
+        v-model="video.isPublic">
+      </v-switch>
+      <br>
+      <!-- Submit -->
+      <v-btn
+        class="accent"
+        @click="submit">
+        Submit
+      </v-btn>
     </v-flex>
   </v-layout>
 </template>
 
 <script>
 import VideoService from '@/services/VideoService'
+import CountryService from '@/services/CountryService'
 import axios from 'axios'
 import {mapState} from 'vuex'
+import _ from 'lodash'
 
 export default {
   data () {
     return {
-      src: 'http://localhost:8081/videos/',
+      src: 'http://localhost:8081/videos/edit/',
       video: null,
-      alreadyLiked: false,
-      alreadyDisliked: false
+      titleRules: [
+        v => !!v || 'Title is required',
+        v => (v && v.length <= 30) || 'Title maximum characters size is 30',
+        v => (v && v.length >= 1) || 'Title must contain at least 1 character'
+      ],
+      country: null,
+      countries: []
     }
   },
   methods: {
-    async like () {
-      if (this.isUserLoggedIn && !this.isAdmin){
-        await axios.post(this.src + '/addLike', {}, {
-          headers: {
-            'Authorization': `Bearer ${this.token}`
-          }
-        })
-          .then((response) => {
-            console.log(response.data)
-            this.video.likes += response.data.like
-            this.alreadyLiked = (response.data.like > 0)
-            this.video.dislikes += response.data.dislike
-            this.alreadyDisliked = false
-          })
-          .catch((error) => {
-            this.$store.dispatch('setSnack', {
-              snack: error.response.data.error
-            })
-          })
-      } else {
-        if (this.isUserLoggedIn && this.isAdmin){
-          this.$store.dispatch('setSnack', {
-            snack: 'Admins are not able to like / dislike'
-          })
-          return
-        }
-
+    async submit () {
+      if (!this.video.title){
         this.$store.dispatch('setSnack', {
-          snack: 'Login to be able to like / dislike'
+          snack: 'Title is required'
         })
+        return
       }
-    },
 
-    async dislike() {
-      if (this.isUserLoggedIn && !this.isAdmin){
-        await axios.post(this.src + '/addDislike', {}, {
-          headers: {
-            'Authorization': `Bearer ${this.token}`
-          }
-        })
-          .then((response) => {
-            console.log(response.data)
-            this.video.dislikes += response.data.dislike
-            this.alreadyDisliked = (response.data.dislike > 0)
-            this.video.likes += response.data.like
-            this.alreadyLiked = false
-          })
-          .catch((error) => {
-            this.$store.dispatch('setSnack', {
-              snack: error.response.data.error
-            })
-          })
-      } else {
-        if (this.isUserLoggedIn && this.isAdmin){
-          this.$store.dispatch('setSnack', {
-            snack: 'Admins are not able to like / dislike'
-          })
-          return
-        }
-
+      if (!this.video.countryId){
         this.$store.dispatch('setSnack', {
-          snack: 'Login to be able to like / dislike'
+          snack: 'Country is required'
+        })
+        return
+      }
+
+      try {
+        const response = await VideoService.editVideoSubmit(this.video.id, {
+          id: this.video.id,
+          authorUsername: this.video.authorUsername,
+          title: this.video.title,
+          description: this.video.description,
+          countryId: this.video.countryId,
+          isPublic: this.video.isPublic
+        })
+
+        if (response.data.success) {
+          this.$store.dispatch('setSnack', {
+            snack: response.data.success,
+            snackColor: 'success'
+          })
+
+          this.$router.push({
+            name: 'Profile',
+            params: {
+              username: this.video.authorUsername
+            }
+          })
+        }
+      } catch (error) {
+        this.$store.dispatch('setSnack', {
+          snack: error.response.data.error
         })
       }
     }
   },
+  watch: {
+    country: function (value) {
+      this.video.countryId = value.id
+    }
+  },
   async mounted () {
-    this.src += this.$route.params.videoId
-    var self = this
-
-    // video stream
-    await axios.post(self.src).then((response) => {
-      self.video = response.data
-      axios.post(self.src + '/addView')
-        .then((response) => {
-        })
-    })
-
-    if ((self.isUserLoggedIn && !self.isAdmin)) {
-      await axios.post(self.src + '/pointsByUser', {}, {headers: {'Authorization': `Bearer ${self.token}`}})
-      .then((response) => {
-        console.log(response.data)
-        if (response.data.liked) {
-          self.alreadyLiked = true
-        }
-        if (response.data.disliked) {
-          self.alreadyDisliked = true
-        }
+    // video
+    try {
+      await VideoService.editVideo(this.$route.params.videoId).then((response) => {
+        this.video = response.data.video
+      })
+    } catch (error) {
+      this.$store.dispatch('setSnack', {
+        snack: error.response.data.error
+      })
+    }
+    // countries
+    try {
+      const response = await CountryService.countries()
+      this.countries = response.data
+      // highlight country already set
+      var i = _.findIndex(this.countries, ['id', this.video.countryId])
+      this.country = this.countries[i]
+    } catch (error) {
+      this.$store.dispatch('setSnack', {
+        snack: error.response.data.error
       })
     }
   },

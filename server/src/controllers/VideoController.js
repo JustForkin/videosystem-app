@@ -381,6 +381,71 @@ module.exports = {
     }
   },
 
+  async edit (req, res) {
+    try {
+      const video = await Video.findOne({
+        where: {
+          id: req.params.videoId
+        }
+      })
+
+      if (video) {
+        res.send({
+          video: {
+            authorUsername: video.dataValues.authorUsername,
+            countryId: video.dataValues.countryId,
+            description: video.dataValues.description,
+            dislikes: video.dataValues.dislikes,
+            id: video.dataValues.id,
+            isPublic: video.dataValues.isPublic,
+            likes: video.dataValues.likes,
+            title: video.dataValues.title,
+            uploadDate: video.dataValues.uploadDate,
+            views: video.dataValues.views
+          }
+        })
+      } else {
+        res.status(400).send({
+          error: 'There is no video with the ID'
+        })
+      }
+    } catch (err) {
+      res.status(400).send({
+        error: 'Something went wrong: ' + err
+      })
+    }
+  },
+
+  async editSubmit (req, res) {
+    try {
+      if (req.user.username != req.body.authorUsername) {
+        res.status(400).send({
+          error: 'Something went wrong: ' + err
+        })
+        return
+      }
+
+      Video.update({
+        title: req.body.title,
+        description: req.body.description,
+        countryId: req.body.countryId,
+        isPublic: req.body.isPublic
+      }, {
+        where: {
+          id: req.body.id
+        }
+      })
+
+      res.status(200).send({
+        success: 'The video has been successfully updated'
+      })
+    } catch (err) {
+      res.status(400).send({
+        error: 'Something went wrong: ' + err
+      })
+    }
+  },
+
   async upload (req, res) {
     // user
     console.log(req.user.username)

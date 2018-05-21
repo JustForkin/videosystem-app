@@ -1,11 +1,28 @@
 <template>
   <v-layout row style="margin-top: 0px;">
     <v-flex xs12 offset-xs0 sm10 offset-sm1 md8 offset-md2 lg6 offset-lg3 xl4 offset-xl4>
-      <v-btn
-        :to="{name: 'EditMyProfile'}"
-        class="primary">
-        Edit my profile
-      </v-btn>
+      <v-layout row>
+        <v-btn
+          small
+          v-if="isUserLoggedIn && !isAdmin"
+          :to="{name: 'EditMyProfile'}"
+          class="primary">
+          Edit my profile
+        </v-btn>
+        <v-btn
+          small
+          v-if="isUserLoggedIn && !isAdmin"
+          :to="{name: 'LikedVideos'}"
+          class="success">
+          Liked Videos
+        </v-btn>
+        <v-btn
+          small
+          v-if="isUserLoggedIn && !isAdmin"
+          class="accent">
+          Watch later
+        </v-btn>
+      </v-layout>
       <v-layout row class="mb-2">
         <v-flex xs12>
           <v-chip v-if="!user.isAdmin" large><h2><v-icon>perm_identity</v-icon>{{user.username}}</h2></v-chip>

@@ -106,6 +106,11 @@ module.exports = (app) => {
     isAuthenticated,
     upload.single('videoFile'),
     VideoController.upload)
+  app.get(
+    '/me/liked',
+    isAuthenticated,
+    VideoController.likedVideos)
+
 
   // users
   app.get(

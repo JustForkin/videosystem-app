@@ -36,5 +36,8 @@ export default {
   },
   upload (formData) {
     return api().post(`upload`, formData)
+  },
+  likedVideos () {
+    return api().get(`me/liked`)
   }
 }

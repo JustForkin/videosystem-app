@@ -2,6 +2,12 @@ const {Video, LikedVideo, DislikedVideo, WatchLater} = require('../models')
 const Sequelize = require('sequelize')
 const Op = Sequelize.Op
 const fs = require('fs')
+const config = require('../config/config')
+var sequelize = new Sequelize(
+  config.db.database,
+  config.db.user,
+  config.db.password,
+  config.db.options)
 
 module.exports = {
   async videos (req, res){
@@ -526,6 +532,28 @@ module.exports = {
           error: 'Something went wrong: ' + err
         })
       }
+    }
+  },
+
+  async likedVideos (req, res) {
+    try {
+      let likedVideos = []
+
+      await sequelize.query(
+        'SELECT * FROM "Videos" ' +
+        'INNER JOIN "LikedVideos" USING ("id") ' +
+        'WHERE "isPublic" = TRUE ' +
+        'AND "username" = \'' + req.user.username + '\'', {
+        type: Sequelize.QueryTypes.SELECT
+      }).then(_select => {
+          likedVideos = _select
+        })
+
+      res.send(likedVideos)
+    } catch (err) {
+      res.status(400).send({
+        error: 'Something went wrong: ' + err
+      })
     }
   }
 }

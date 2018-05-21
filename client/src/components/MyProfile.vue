@@ -39,9 +39,17 @@
             <v-flex xs6>
               <v-card-actions>
                 <v-btn
+                  v-if="video.isPublic"
                   flat
                   color="accent"
                   :to="{name: 'Watch', params: { videoId: video.id }}">
+                  Watch
+                </v-btn>
+                <v-btn
+                  v-if="!video.isPublic"
+                  flat
+                  color="accent"
+                  :to="{name: 'WatchPrivate', params: { videoId: video.id }}">
                   Watch
                 </v-btn>
               </v-card-actions>

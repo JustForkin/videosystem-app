@@ -10,11 +10,23 @@
       </video>
       <v-layout row class="mt-3">
         <v-flex xs8>
-          <h1>{{video.title}}</h1>
-          <p>by
-            <v-chip small color="">
+          <h1>{{video.title}}
+            <v-btn
+            flat
+            small color="error">
+            Edit video
+            </v-btn>
+          </h1>
+          <v-chip small color="error">
+            Private
+          </v-chip>
+          <p>
+            by<v-btn
+              :to="{name: 'Profile', params: { username: video.authorUsername }}"
+              flat
+              small color="">
               <v-icon small>perm_identity</v-icon>{{video.authorUsername}}
-            </v-chip>
+            </v-btn>
           </p>
           <p>{{video.description}}</p>
         </v-flex>

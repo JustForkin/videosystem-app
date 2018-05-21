@@ -7,6 +7,7 @@ import Upload from '@/components/Upload'
 import Users from '@/components/Users'
 import Profile from '@/components/Profile'
 import MyProfile from '@/components/MyProfile'
+import EditVideo from '@/components/EditVideo'
 
 const routes = [
   {
@@ -28,6 +29,11 @@ const routes = [
     path: '/videos/:videoId',
     name: 'Watch',
     component: Watch
+  },
+  {
+    path: '/videos/edit/:videoId',
+    name: 'EditVideo',
+    component: EditVideo
   },
   {
     path: '/videos/private/:videoId',

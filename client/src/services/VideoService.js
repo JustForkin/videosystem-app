@@ -25,6 +25,9 @@ export default {
   watchPrivateInfo (videoId) {
     return api().post(`videos/private/${videoId}`)
   },
+  editVideo (videoId) {
+    return api().post(`videos/edit/${videoId}`)
+  },
   upload (formData) {
     return api().post(`upload`, formData)
   }

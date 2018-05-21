@@ -38,9 +38,15 @@
       <br>
       <!-- Submit -->
       <v-btn
-        class="accent"
+        class="primary"
         @click="submit">
-        Submit
+        Submit changes
+      </v-btn>
+      <!-- Remove -->
+      <v-btn
+        class="error"
+        @click="remove">
+        Remove video
       </v-btn>
     </v-flex>
   </v-layout>
@@ -93,6 +99,29 @@ export default {
           isPublic: this.video.isPublic
         })
 
+        if (response.data.success) {
+          this.$store.dispatch('setSnack', {
+            snack: response.data.success,
+            snackColor: 'success'
+          })
+
+          this.$router.push({
+            name: 'Profile',
+            params: {
+              username: this.video.authorUsername
+            }
+          })
+        }
+      } catch (error) {
+        this.$store.dispatch('setSnack', {
+          snack: error.response.data.error
+        })
+      }
+    },
+
+    async remove () {
+      try {
+        const response = await VideoService.editVideoRemove(this.video.id)
         if (response.data.success) {
           this.$store.dispatch('setSnack', {
             snack: response.data.success,

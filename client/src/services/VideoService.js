@@ -31,6 +31,9 @@ export default {
   editVideoSubmit (videoId, reqBodyData) {
     return api().post(`videos/edit/${videoId}`, reqBodyData)
   },
+  editVideoRemove (videoId) {
+    return api().post(`videos/edit/remove/${videoId}`)
+  },
   upload (formData) {
     return api().post(`upload`, formData)
   }

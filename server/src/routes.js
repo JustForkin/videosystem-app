@@ -98,6 +98,10 @@ module.exports = (app) => {
     isAuthenticated,
     VideoController.editSubmit)
   app.post(
+    '/videos/edit/remove/:videoId',
+    isAuthenticated,
+    VideoController.editRemove)
+  app.post(
     '/upload',
     isAuthenticated,
     upload.single('videoFile'),

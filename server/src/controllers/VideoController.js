@@ -446,6 +446,45 @@ module.exports = {
     }
   },
 
+  async editRemove (req, res) {
+    try {
+      const video = await Video.findById(req.params.videoId)
+      if (!video) {
+        res.status(400).send({
+          error: 'Video does not exist'
+        })
+      }
+
+      if (video.dataValues.authorUsername != req.user.username) {
+        res.status(403).send({
+          error: 'You have no access to edit the video'
+        })
+      }
+
+      // delete the file
+      var path = __dirname.replace('controllers', 'video-uploads/') + video.dataValues.videoFile
+      fs.unlink(path, (err) => {
+        if (err) throw err
+        console.log(path + ' file was deleted');
+      })
+
+      // delete DB data
+      await Video.destroy({
+        where: {
+          id: video.dataValues.id
+        }
+      })
+
+      res.status(200).send({
+        success: 'The video has been successfully removed'
+      })
+    } catch (err) {
+      res.status(400).send({
+        error: 'Something went wrong: ' + err
+      })
+    }
+  },
+
   async upload (req, res) {
     // user
     console.log(req.user.username)

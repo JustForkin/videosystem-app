@@ -26,6 +26,14 @@
               small color="">
               <v-icon small>perm_identity</v-icon>{{video.authorUsername}}
             </v-btn>
+            <v-btn
+              v-if="isUserLoggedIn && !isAdmin"
+              flat
+              outline
+              @click="addToWatchLater"
+              small color="blue">
+              <v-icon small>add</v-icon>Watch Later
+            </v-btn>
           </p>
           <p>{{video.description}}</p>
         </v-flex>
@@ -147,6 +155,25 @@ export default {
 
         this.$store.dispatch('setSnack', {
           snack: 'Login to be able to like / dislike'
+        })
+      }
+    },
+
+    async addToWatchLater () {
+      try{
+        const response = await VideoService.watchLaterAdd({
+          videoId: this.video.id
+        })
+
+        if (response.data.success) {
+          this.$store.dispatch('setSnack', {
+            snack: response.data.success,
+            snackColor: 'success'
+          })
+        }
+      } catch (error) {
+        this.$store.dispatch('setSnack', {
+          snack: error.response.data.error
         })
       }
     }

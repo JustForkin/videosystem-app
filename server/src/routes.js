@@ -110,7 +110,18 @@ module.exports = (app) => {
     '/me/liked',
     isAuthenticated,
     VideoController.likedVideos)
-
+  app.get(
+    '/me/watchlater',
+    isAuthenticated,
+    VideoController.watchLater)
+  app.post(
+    '/me/watchlater/add',
+    isAuthenticated,
+    VideoController.watchLaterAdd)
+  app.post(
+    '/me/watchlater/remove',
+    isAuthenticated,
+    VideoController.watchLaterRemove)
 
   // users
   app.get(

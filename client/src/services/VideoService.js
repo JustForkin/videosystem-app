@@ -39,5 +39,14 @@ export default {
   },
   likedVideos () {
     return api().get(`me/liked`)
+  },
+  watchLater () {
+    return api().get(`me/watchlater`)
+  },
+  watchLaterAdd (videoId) {
+    return api().post('me/watchlater/add', videoId)
+  },
+  watchLaterRemove (videoId) {
+    return api().post('me/watchlater/remove', videoId)
   }
 }

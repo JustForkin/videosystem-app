@@ -555,5 +555,89 @@ module.exports = {
         error: 'Something went wrong: ' + err
       })
     }
+  },
+
+  async watchLater (req, res) {
+    try {
+      let videos = []
+
+      await sequelize.query(
+        'SELECT * FROM "Videos" ' +
+        'INNER JOIN "WatchLaters" USING ("id") ' +
+        'WHERE "isPublic" = TRUE ' +
+        'AND "username" = \'' + req.user.username + '\'', {
+        type: Sequelize.QueryTypes.SELECT
+      }).then(_select => {
+          videos = _select
+        })
+
+      res.send(videos)
+    } catch (err) {
+      res.status(400).send({
+        error: 'Something went wrong: ' + err
+      })
+    }
+  },
+
+  async watchLaterAdd (req, res) {
+    try {
+      const current = await WatchLater.findOne({
+        where: {
+          id: req.body.videoId,
+          username: req.user.username
+        }
+      })
+
+      if (current) {
+        res.status(400).send({
+          error: 'The video is already added to Watch Later'
+        })
+      }
+
+      await WatchLater.create({
+        username: req.user.username,
+        id: req.body.videoId
+      })
+
+      res.status(200).send({
+        success: 'Successfully added to Watch Later'
+      })
+    } catch (err) {
+      res.status(400).send({
+        error: 'Something went wrong: ' + err
+      })
+    }
+  },
+
+  async watchLaterRemove (req, res) {
+    try {
+      const current = await WatchLater.findOne({
+        where: {
+          id: req.body.videoId,
+          username: req.user.username
+        }
+      })
+
+      if (!current) {
+        res.status(400).send({
+          error: 'The video is not in Watch Later list'
+        })
+      }
+
+      await WatchLater.destroy({
+        where: {
+          username: req.user.username,
+          id: req.body.videoId
+        }
+      })
+
+      res.status(200).send({
+        success: 'Successfully removed from Watch Later'
+      })
+    } catch (err) {
+      res.status(400).send({
+        error: 'Something went wrong: ' + err
+      })
+    }
   }
 }

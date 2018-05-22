@@ -10,6 +10,7 @@ import MyProfile from '@/components/MyProfile'
 import EditVideo from '@/components/EditVideo'
 import EditMyProfile from '@/components/EditMyProfile'
 import LikedVideos from '@/components/LikedVideos'
+import WatchLater from '@/components/WatchLater'
 
 const routes = [
   {
@@ -71,6 +72,11 @@ const routes = [
     path: '/me/liked',
     name: 'LikedVideos',
     component: LikedVideos
+  },
+  {
+    path: '/me/watchlater',
+    name: 'WatchLater',
+    component: WatchLater
   },
   {
     path: '*',

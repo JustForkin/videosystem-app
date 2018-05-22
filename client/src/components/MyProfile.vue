@@ -19,6 +19,7 @@
         <v-btn
           small
           v-if="isUserLoggedIn && !isAdmin"
+          :to="{name: 'WatchLater'}"
           class="accent">
           Watch later
         </v-btn>

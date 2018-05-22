@@ -12,11 +12,19 @@
         <v-flex xs8>
           <h1>{{video.title}}
             <v-btn
-            v-if="user.username == video.authorUsername"
+            v-if="isUserLoggedIn && (user.username == video.authorUsername)"
             :to="{name: 'EditVideo', params: { videoId: video.id }}"
             flat
             small color="error">
             Edit video
+            </v-btn>
+            <v-btn
+            v-if="isUserLoggedIn && isAdmin"
+            @click="removeVideo"
+            flat
+            outline
+            small color="error">
+            Remove video
             </v-btn>
           </h1>
           <p>by
@@ -176,6 +184,27 @@ export default {
           snack: error.response.data.error
         })
       }
+    },
+
+    async removeVideo () {
+      try {
+        const response = await VideoService.editVideoRemove(this.$route.params.videoId)
+
+        if (response.data.success) {
+          this.$store.dispatch('setSnack', {
+            snack: response.data.success,
+            snackColor: 'success'
+          })
+
+          this.$router.push({
+            name: 'Videos'
+          })
+        }
+      } catch (error) {
+        this.$store.dispatch('setSnack', {
+          snack: error.response.data.error
+        })
+      }
     }
   },
   async mounted () {
@@ -185,7 +214,7 @@ export default {
     // video stream
     await axios.post(self.src).then((response) => {
       self.video = response.data
-      axios.post(self.src + '/addView')
+      VideoService.addView(self.$route.params.videoId)
         .then((response) => {
         })
     })

@@ -174,9 +174,17 @@ module.exports = {
   async removeMyProfile (req, res) {
     try {
       if (req.user.username != req.body.username) {
-        res.status(403).send({
-          error: 'You do not have access to remove the profile'
+        const user = await User.findOne({
+          where: {
+            username: req.user.username
+          }
         })
+
+        if (!user.dataValues.isAdmin) {
+          res.status(403).send({
+            error: 'You do not have access to remove the profile'
+          })
+        }
       }
 
       // remove all videos

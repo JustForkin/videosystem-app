@@ -1,4 +1,4 @@
-const {Video, LikedVideo, DislikedVideo, WatchLater} = require('../models')
+const {User, Video, LikedVideo, DislikedVideo, WatchLater} = require('../models')
 const Sequelize = require('sequelize')
 const Op = Sequelize.Op
 const fs = require('fs')
@@ -462,9 +462,17 @@ module.exports = {
       }
 
       if (video.dataValues.authorUsername != req.user.username) {
-        res.status(403).send({
-          error: 'You have no access to edit the video'
+        const user = await User.findOne({
+          where: {
+            username: req.user.username
+          }
         })
+
+        if (!user.dataValues.isAdmin) {
+          res.status(403).send({
+            error: 'You have no access to edit the video'
+          })
+        }
       }
 
       // delete the file

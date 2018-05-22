@@ -25,6 +25,9 @@ export default {
   watchPrivateInfo (videoId) {
     return api().post(`videos/private/${videoId}`)
   },
+  addView (videoId) {
+    return api().post(`videos/${videoId}/addView`)
+  },
   editVideo (videoId) {
     return api().get(`videos/edit/${videoId}`)
   },

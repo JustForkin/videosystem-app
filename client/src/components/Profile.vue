@@ -5,6 +5,14 @@
         <v-flex xs12>
           <v-chip v-if="!user.isAdmin" large><h2><v-icon>perm_identity</v-icon>{{user.username}}</h2></v-chip>
           <v-chip v-if="user.isAdmin" large color="error"><h2><v-icon>perm_identity</v-icon>{{user.username}}</h2></v-chip>
+          <v-btn
+            v-if="isUserLoggedIn && isAdmin"
+            @click="removeUser"
+            flat
+            outline
+            small color="error">
+            Remove user
+          </v-btn>
           <h2>{{user.firstname}} {{user.lastname}}</h2>
           <span v-if="user.about"><b><i>About:</i></b> {{user.about}}</span><br>
           <span v-if="user.birthday"><b><i>Birthday:</i></b> {{user.birthday}}</span><br>
@@ -82,6 +90,33 @@ export default {
         sum += this.videos[i].views
       }
       return sum
+    },
+
+    async removeUser () {
+      try {
+        if (!(this.isAdmin && this.isUserLoggedIn)) {
+          return
+        }
+
+        const response = await UserService.removeMyProfile({
+          username: this.$route.params.username
+        })
+
+        if (response.data.success) {
+          this.$store.dispatch('setSnack', {
+            snack: response.data.success,
+            snackColor: 'success'
+          })
+
+          this.$router.push({
+            name: 'Videos'
+          })
+        }
+      } catch (error) {
+        this.$store.dispatch('setSnack', {
+          snack: error.response.data.error
+        })
+      }
     }
   },
   async mounted () {

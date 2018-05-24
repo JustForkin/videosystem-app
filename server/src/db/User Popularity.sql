@@ -1,4 +1,8 @@
 -- THE FUNCTION
+-- Video Rating (VR) = Likes (L) - Dislikes (D)
+-- N - Number of uploaded videos
+-- Longetivity Coefficient (LC) = (1 + 2 + ... + N) / N = (1 + N) / 2,    N > 0
+-- R-Index (RI) = (LC + AVG(VR)) / 2
 CREATE OR REPLACE FUNCTION "user_popularity"("username_" character varying(255))
 RETURNS DOUBLE PRECISION
 AS $$

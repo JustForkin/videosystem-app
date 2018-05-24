@@ -6,7 +6,7 @@
           <v-chip v-if="!user.isAdmin" large><h2><v-icon>perm_identity</v-icon>{{user.username}}</h2></v-chip>
           <v-chip v-if="user.isAdmin" large color="error"><h2><v-icon>perm_identity</v-icon>{{user.username}}</h2></v-chip>
           <v-btn
-            v-if="isUserLoggedIn && isAdmin"
+            v-if="isUserLoggedIn && isAdmin && !user.isAdmin"
             @click="removeUser"
             flat
             outline
